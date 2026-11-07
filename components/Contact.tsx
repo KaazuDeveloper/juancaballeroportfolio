@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, Check, Copy, Download } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Download, Mail } from "lucide-react";
 import { profile } from "@/lib/content";
 import { PillButton, Reveal } from "./ui";
 
@@ -31,7 +31,10 @@ export function Contact() {
             Si tienes un proyecto, un puesto o quieres comentar algo, escríbeme.
           </p>
           <div className="mt-9 flex justify-center">
-            <PillButton href={`mailto:${profile.email}`}>Escribir a {profile.email}</PillButton>
+            <PillButton href={`mailto:${profile.email}`}>
+              <Mail className="size-[18px] sm:hidden" strokeWidth={2} />
+              <span className="hidden sm:inline">Escribir a</span> {profile.email}
+            </PillButton>
           </div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
             <button type="button" onClick={copy} className={link}>

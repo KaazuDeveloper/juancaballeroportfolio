@@ -28,34 +28,20 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: "Comandero móvil",
-    icon: "phone",
-    tint: "orange",
-    kind: "App multiplataforma",
-    year: "2025",
-    context: "Soluciones Informáticas M.J",
-    summary:
-      "Una app para que los camareros tomen las comandas desde el móvil. Un solo código que se compila para Android y para iOS.",
-    details: [
-      "Desarrollada con Flutter como app nativa para Android e iOS.",
-      "Se conecta a un servidor ASP.NET del que obtiene los datos.",
-    ],
-    stack: ["Flutter", "ASP.NET"],
-  },
-  {
-    title: "TPV para hostelería",
+    title: "TPV y comandero",
     icon: "store",
     tint: "green",
-    kind: "Software de escritorio",
+    kind: "Hostelería · escritorio y móvil",
     year: "2025",
     context: "Soluciones Informáticas M.J",
     summary:
-      "Un sistema de punto de venta pensado para hostelería: el programa con el que bares y restaurantes trabajan cada día.",
+      "El sistema de punto de venta con el que bares y restaurantes trabajan cada día, y el comandero con el que los camareros toman las comandas desde el móvil.",
     details: [
-      "Aplicación de escritorio en .NET con Windows Forms.",
-      "Interfaz construida con los componentes de Telerik.",
+      "TPV de escritorio en .NET con Windows Forms y componentes de Telerik.",
+      "Comandero en Flutter, compilado para Android e iOS desde un solo código.",
+      "El comandero se conecta a un servidor ASP.NET del que obtiene los datos.",
     ],
-    stack: [".NET", "Windows Forms", "Telerik"],
+    stack: [".NET", "Windows Forms", "Telerik", "Flutter", "ASP.NET"],
   },
   {
     title: "ERP y servicios web",
@@ -68,10 +54,10 @@ export const projects: Project[] = [
       "Desarrollo y mantenimiento de un ERP en producción, de sus servicios web y de las aplicaciones web conectadas a él.",
     details: [
       "Librerías en .NET 8 y aplicaciones de escritorio con Windows Forms.",
-      "Aplicaciones web con Angular, SQL Server, PHP y JavaScript.",
+      "Aplicaciones web con Angular, MySQL, PHP y JavaScript.",
       "Desarrollo y mantenimiento de servicios web.",
     ],
-    stack: [".NET 8", "Angular", "SQL Server", "PHP"],
+    stack: [".NET 8", "Angular", "MySQL", "PHP"],
   },
   {
     title: "Monitorización con ELK",
@@ -103,34 +89,72 @@ export const projects: Project[] = [
   },
 ];
 
-export const experience = [
+export type TimelineKind = "trabajo" | "juegos" | "formacion";
+
+export type TimelineItem = {
+  org: string;
+  role: string;
+  place: string;
+  kind: TimelineKind;
+  /* Year + month as "YYYY-MM"; `to: null` means ongoing. */
+  from: string;
+  to: string | null;
+  period: string;
+  note: string;
+};
+
+export const timeline: TimelineItem[] = [
   {
-    period: "2025 — hoy",
+    org: "Soluciones Informáticas M.J",
     role: "Desarrollador multiplataforma",
-    company: "Soluciones Informáticas M.J",
     place: "Córdoba",
+    kind: "trabajo",
+    from: "2025-10",
+    to: null,
+    period: "Oct 2025 — hoy",
+    note: "TPV para hostelería y comandero móvil con Flutter.",
   },
   {
-    period: "2024 — 2025",
+    org: "Iconos Software",
     role: "Desarrollador multiplataforma",
-    company: "Iconos Software",
     place: "Córdoba",
+    kind: "trabajo",
+    from: "2024-09",
+    to: "2025-10",
+    period: "Sep 2024 — Oct 2025",
+    note: "ERP, servicios web y aplicaciones con .NET, Angular y MySQL.",
   },
   {
-    period: "2024",
+    org: "Tesar S.p.A",
     role: "Desarrollador multiplataforma",
-    company: "Tesar S.p.A",
     place: "Italia",
+    kind: "trabajo",
+    from: "2024-03",
+    to: "2024-06",
+    period: "Mar — Jun 2024",
+    note: "Stack ELK, pruebas con Selenium y componentes en Angular.",
   },
   {
-    period: "2022 — 2025",
+    org: "IES Trassierra",
+    role: "Técnico Superior en Desarrollo de Aplicaciones Web",
+    place: "Córdoba",
+    kind: "formacion",
+    from: "2022-09",
+    to: "2024-06",
+    period: "2022 — 2024",
+    note: "Ciclo formativo de grado superior.",
+  },
+  {
+    org: "Málaga Game Jam",
     role: "Desarrollador de videojuegos",
-    company: "Málaga Game Jam",
     place: "Málaga",
+    kind: "juegos",
+    from: "2022-01",
+    to: "2025-12",
+    period: "2022 — 2025",
+    note: "Juegos completos en un fin de semana con Unity3D y C#.",
   },
 ];
-
-export const education = "Técnico Superior en Desarrollo de Aplicaciones Web — IES Trassierra, 2024";
 
 export const platforms = [
   { label: "Escritorio", name: "Windows", note: "TPV y ERP con .NET y Windows Forms", tint: "blue" },
@@ -150,7 +174,7 @@ export const stack = [
   },
   {
     group: "Datos y calidad",
-    items: ["SQL Server", "Elasticsearch", "Logstash", "Kibana", "Selenium"],
+    items: ["MySQL", "Elasticsearch", "Logstash", "Kibana", "Selenium"],
   },
   {
     group: "Juegos",

@@ -70,7 +70,7 @@ export function PillButton({
   return (
     <a
       href={href}
-      className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-full px-[22px] text-[17px] transition-colors ${
+      className={`inline-flex h-11 items-center justify-center gap-1.5 rounded-full px-[18px] text-[16px] md:px-[22px] md:text-[17px] transition-colors ${
         variant === "filled"
           ? "bg-action text-white hover:bg-[#0077ed]"
           : "border border-action text-action hover:bg-action hover:text-white"

@@ -1,10 +1,12 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { motion, type MotionStyle } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
+import { order, products, ticket } from "@/lib/demo";
 
 /* Renders children at a fixed design size and scales them to the container width. */
-function Fit({ width, height, children }: { width: number; height: number; children: ReactNode }) {
+export function Fit({ width, height, children }: { width: number; height: number; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0);
   useLayoutEffect(() => {
@@ -26,16 +28,19 @@ function Fit({ width, height, children }: { width: number; height: number; child
   );
 }
 
-export function Laptop({ children }: { children: ReactNode }) {
+export function Laptop({ children, lid }: { children: ReactNode; lid?: MotionStyle }) {
   return (
-    <div className="w-full">
-      <div className="rounded-t-[4.5%_7%] bg-[#0d0d0f] p-[1.8%] pb-[2.4%] shadow-[0_0_0_1px_#3a3a3c_inset]">
+    <div className="w-full [perspective:2400px]">
+      <motion.div
+        style={{ transformOrigin: "50% 100%", ...lid }}
+        className="rounded-t-[4.5%_7%] bg-[#0d0d0f] p-[1.8%] pb-[2.4%] shadow-[0_0_0_1px_#3a3a3c_inset] [backface-visibility:hidden]"
+      >
         <div className="overflow-hidden rounded-[0.6%] bg-white">
           <Fit width={960} height={600}>
             {children}
           </Fit>
         </div>
-      </div>
+      </motion.div>
       <div className="relative mx-[-6%] h-[clamp(8px,2.2vw,18px)] rounded-b-[40%_100%] bg-gradient-to-b from-[#e3e4e6] via-[#c9cacc] to-[#a1a2a5]">
         <div className="absolute left-1/2 top-0 h-[45%] w-[14%] -translate-x-1/2 rounded-b-[10px] bg-[#b4b5b8]" />
       </div>
@@ -55,27 +60,6 @@ export function Phone({ children }: { children: ReactNode }) {
     </div>
   );
 }
-
-const products = [
-  { name: "Café con leche", price: "1,40", color: "#a2845e" },
-  { name: "Caña", price: "1,80", color: "#f5b014" },
-  { name: "Tinto de verano", price: "2,50", color: "#c0392b" },
-  { name: "Agua", price: "1,20", color: "#5ac8fa" },
-  { name: "Tostada", price: "2,50", color: "#e08e45" },
-  { name: "Salmorejo", price: "4,50", color: "#ff6b4a" },
-  { name: "Flamenquín", price: "8,00", color: "#d4a017" },
-  { name: "Berenjenas", price: "6,50", color: "#8e44ad" },
-  { name: "Refresco", price: "2,20", color: "#ff375f" },
-  { name: "Croquetas", price: "7,00", color: "#c08a3e" },
-  { name: "Ensalada", price: "6,00", color: "#34c759" },
-  { name: "Tarta", price: "4,00", color: "#af52de" },
-];
-
-const ticket = [
-  { qty: 2, name: "Caña", total: "3,60" },
-  { qty: 1, name: "Salmorejo", total: "4,50" },
-  { qty: 1, name: "Flamenquín", total: "8,00" },
-];
 
 export function TpvScreen() {
   return (
@@ -135,14 +119,6 @@ export function TpvScreen() {
     </div>
   );
 }
-
-const order = [
-  { name: "Caña", note: "Bebidas", qty: 2, price: "1,80" },
-  { name: "Salmorejo", note: "Raciones", qty: 1, price: "4,50" },
-  { name: "Flamenquín", note: "Raciones", qty: 1, price: "8,00" },
-  { name: "Café con leche", note: "Cafés", qty: 0, price: "1,40" },
-  { name: "Tarta de queso", note: "Postres", qty: 0, price: "4,00" },
-];
 
 export function ComanderoScreen() {
   return (

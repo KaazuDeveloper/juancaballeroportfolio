@@ -10,7 +10,7 @@ const stats = [
 export function Highlights() {
   return (
     <>
-      <section className="bg-mist px-5 py-20 md:py-28">
+      <section className="bg-paper px-5 py-20 md:py-28">
         <div className="mx-auto max-w-[980px]">
           <Reveal>
             <h2 className="text-center font-display text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-[1.08] tracking-[-0.03em]">
@@ -30,21 +30,6 @@ export function Highlights() {
             ))}
           </div>
         </div>
-      </section>
-
-      <section className="bg-paper px-5 py-24 text-center md:py-36">
-        <Reveal>
-          <p className="text-[17px] font-semibold text-ink-2 md:text-[19px]">Clientes</p>
-          <h2 className="mt-2 font-display text-[clamp(3rem,9vw,6.5rem)] font-semibold leading-[1.02] tracking-[-0.04em]">
-            Córdoba
-            <br />
-            <span className="text-gradient">y provincia.</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-[620px] text-pretty text-[19px] leading-[1.45] text-ink-2 md:text-[21px]">
-            Mis clientes no están solo en la capital: trabajo con negocios y empresas de distintos
-            puntos de la provincia, y el software tiene que responder igual de bien en todos ellos.
-          </p>
-        </Reveal>
       </section>
     </>
   );

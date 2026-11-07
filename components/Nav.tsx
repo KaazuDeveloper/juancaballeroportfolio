@@ -38,7 +38,7 @@ export function Nav() {
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className="pointer-events-auto flex h-12 items-center gap-1 rounded-full border border-black/[0.06] bg-white/85 pl-1.5 pr-1.5 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)] backdrop-blur-md"
+        className="pointer-events-auto flex h-12 items-center gap-1 rounded-full max-[374px]:gap-0.5 border border-black/[0.06] bg-white/85 pl-1.5 pr-1.5 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)] backdrop-blur-md"
       >
         <a href="#top" aria-label="Inicio" className="flex items-center gap-2.5 sm:pr-2">
           <span className="flex size-9 items-center justify-center rounded-full bg-ink text-[13px] font-semibold tracking-[-0.02em] text-white">
@@ -66,7 +66,7 @@ export function Nav() {
                 <a
                   href={`#${l.id}`}
                   aria-current={isActive ? "true" : undefined}
-                  className={`relative block whitespace-nowrap rounded-full px-2.5 py-1.5 text-[13px] transition-colors sm:px-3.5 sm:text-[14px] ${
+                  className={`relative block whitespace-nowrap rounded-full px-2.5 py-1.5 text-[13px] transition-colors max-[374px]:px-[7px] max-[374px]:text-[12px] sm:px-3.5 sm:text-[14px] ${
                     isActive ? "text-ink" : "text-ink-2 hover:text-ink"
                   }`}
                 >
@@ -80,9 +80,9 @@ export function Nav() {
         <a
           href={profile.cv}
           download
-          className="ml-0.5 inline-flex h-9 items-center gap-1.5 rounded-full bg-ink px-3 text-[13px] font-medium text-white transition-opacity hover:opacity-85 sm:ml-1 sm:px-4 sm:text-[14px]"
+          className="ml-0.5 inline-flex h-9 items-center gap-1.5 rounded-full bg-ink px-3 text-[13px] max-[374px]:px-2.5 font-medium text-white transition-opacity hover:opacity-85 sm:ml-1 sm:px-4 sm:text-[14px]"
         >
-          <Download className="size-3.5" strokeWidth={2.4} />
+          <Download className="size-3.5 max-[374px]:hidden" strokeWidth={2.4} />
           CV
         </a>
       </motion.nav>

@@ -22,7 +22,6 @@ export function Projects() {
     opener.current?.focus();
   };
 
-  const comandero = byIcon("phone");
   const tpv = byIcon("store");
   const small = [byIcon("building"), byIcon("activity"), byIcon("gamepad")];
 
@@ -40,21 +39,16 @@ export function Projects() {
 
       <div className="mx-auto mt-12 grid max-w-[1240px] gap-3 md:mt-16">
         <Reveal>
-          <Tile project={comandero} onOpen={(e) => show(comandero, e.currentTarget)}>
-            <div className="mx-auto mt-10 w-[200px] md:w-[240px]">
-              <Phone>
-                <ComanderoScreen />
-              </Phone>
-            </div>
-          </Tile>
-        </Reveal>
-
-        <Reveal>
           <Tile project={tpv} onOpen={(e) => show(tpv, e.currentTarget)} dark>
-            <div className="mx-auto mt-10 w-[94%] max-w-[760px]">
+            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
               <Laptop>
                 <TpvScreen />
               </Laptop>
+              <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
+                <Phone>
+                  <ComanderoScreen />
+                </Phone>
+              </div>
             </div>
           </Tile>
         </Reveal>
