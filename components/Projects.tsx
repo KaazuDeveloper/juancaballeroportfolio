@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Check, ChevronRight, Gamepad2, X } from "lucide-react";
-import { projects, type Project } from "@/lib/content";
+import { ArrowUpRight, Check, ChevronRight, X } from "lucide-react";
+import { profile, projects, type Game, type Project } from "@/lib/content";
 import { ComanderoScreen, DashboardScreen, ErpScreen, Laptop, Phone, Screen, TpvScreen } from "./Devices";
 import { Reveal, ease } from "./ui";
 
@@ -68,9 +68,11 @@ export function Projects() {
                       <DashboardScreen />
                     </Screen>
                   )}
-                  {p.icon === "gamepad" && (
-                    <div className="flex aspect-[960/600] items-center justify-center rounded-[14px] bg-gradient-to-br from-[#ff375f] via-[#af52de] to-[#5856d6]">
-                      <Gamepad2 className="size-[38%] text-white" strokeWidth={1.4} />
+                  {p.games && (
+                    <div className="grid grid-cols-2 gap-3">
+                      {p.games.map((g) => (
+                        <GameCard key={g.title} game={g} />
+                      ))}
                     </div>
                   )}
                 </div>
@@ -82,6 +84,31 @@ export function Projects() {
 
       <AnimatePresence>{open && <Modal project={open} onClose={close} />}</AnimatePresence>
     </section>
+  );
+}
+
+function GameCover({ game: g, className }: { game: Game; className: string }) {
+  return (
+    // Plain <img>: small thumbnails served by itch.io's own CDN.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={g.cover} alt={`Portada de ${g.title}`} width={315} height={250} loading="lazy" className={className} />
+  );
+}
+
+function GameCard({ game: g }: { game: Game }) {
+  return (
+    <a href={g.url} target="_blank" rel="noreferrer" className="group block text-left">
+      <span className="block overflow-hidden rounded-[14px] bg-mist">
+        <GameCover
+          game={g}
+          className="aspect-[315/250] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+      </span>
+      <span className="mt-2.5 block text-[15px] font-semibold leading-[1.25] tracking-[-0.01em] group-hover:underline">
+        {g.title}
+      </span>
+      <span className="mt-0.5 block text-[13px] leading-[1.3] text-ink-2">{g.jam}</span>
+    </a>
   );
 }
 
@@ -206,6 +233,38 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
             ))}
           </ul>
         </div>
+
+        {p.games && (
+          <div className="mt-8 border-t border-line pt-8">
+            <p className="text-[17px] font-semibold">Algunos juegos</p>
+            <ul className="mt-4 space-y-5">
+              {p.games.map((g) => (
+                <li key={g.title}>
+                  <a href={g.url} target="_blank" rel="noreferrer" className="group flex items-center gap-4">
+                    <GameCover game={g} className="aspect-[315/250] w-[92px] shrink-0 rounded-[12px] object-cover" />
+                    <span className="min-w-0">
+                      <span className="flex items-center gap-1 text-[17px] font-semibold leading-[1.25] group-hover:underline">
+                        {g.title}
+                        <ArrowUpRight className="size-4 shrink-0 text-ink-3" />
+                      </span>
+                      <span className="mt-1 block text-[15px] leading-[1.35] text-ink-2">{g.blurb}</span>
+                      <span className="mt-1 block text-[13px] text-ink-3">{g.jam}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={profile.itch}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+            >
+              Ver todos en itch.io
+              <ArrowUpRight className="size-4" />
+            </a>
+          </div>
+        )}
 
         <div className="mt-8 grid gap-6 border-t border-line pt-8 sm:grid-cols-2">
           <div>

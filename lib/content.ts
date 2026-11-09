@@ -5,6 +5,7 @@ export const profile = {
   timezone: "Europe/Madrid",
   email: "juan.antonioccpp@gmail.com",
   linkedin: "https://www.linkedin.com/in/juanancaballero",
+  itch: "https://itch.io/profile/kaazu-13",
   cv: "/cv-juan-caballero.pdf",
   languages: "ES · EN · IT",
   currently: "Soluciones Informáticas M.J",
@@ -13,6 +14,14 @@ export const profile = {
 
 export type Tint = "blue" | "green" | "orange" | "red" | "purple" | "pink" | "indigo" | "teal";
 export type IconName = "phone" | "store" | "building" | "activity" | "gamepad";
+
+export type Game = {
+  title: string;
+  blurb: string;
+  jam: string;
+  url: string;
+  cover: string;
+};
 
 export type Project = {
   title: string;
@@ -24,6 +33,7 @@ export type Project = {
   summary: string;
   details: string[];
   stack: string[];
+  games?: Game[];
 };
 
 export const projects: Project[] = [
@@ -86,6 +96,22 @@ export const projects: Project[] = [
       "Juegos completos hechos en un fin de semana, con un tema que se desvela al empezar y el reloj en contra.",
     details: ["Desarrollo en Unity3D y C#."],
     stack: ["Unity3D", "C#"],
+    games: [
+      {
+        title: "Tapiocat",
+        blurb: "Un gato flota dentro de un bubble tea esquivando perlas de tapioca y cubitos de hielo.",
+        jam: "MálagaJam Weekend 19",
+        url: "https://kaazu-13.itch.io/tapiocat",
+        cover: "https://img.itch.zone/aW1nLzE5NTQyMDExLmpwZWc=/315x250%23c/nEpnEw.jpeg",
+      },
+      {
+        title: "¿Caballo o unicornio?",
+        blurb: "Un experimento absurdo para demostrar si sabes diferenciar un caballo de un unicornio.",
+        jam: "MálagaJam Weekend 17",
+        url: "https://xneriss.itch.io/caballo-o-unicornio",
+        cover: "https://img.itch.zone/aW1nLzE0ODI5ODgwLnBuZw==/315x250%23c/2HkKZE.png",
+      },
+    ],
   },
 ];
 
