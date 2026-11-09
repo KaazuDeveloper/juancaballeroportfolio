@@ -49,6 +49,10 @@ export function Contact() {
               LinkedIn
               <ArrowUpRight className="size-4" />
             </a>
+            <a href={profile.github} target="_blank" rel="noreferrer" className={link}>
+              GitHub
+              <ArrowUpRight className="size-4" />
+            </a>
           </div>
         </Reveal>
       </section>
@@ -58,7 +62,9 @@ export function Contact() {
           <span>
             Copyright © {profile.year} {profile.name}.
           </span>
-          <span>{profile.location}</span>
+          <a href={profile.repo} target="_blank" rel="noreferrer" className="hover:underline">
+            Código de esta web
+          </a>
         </div>
       </footer>
     </>

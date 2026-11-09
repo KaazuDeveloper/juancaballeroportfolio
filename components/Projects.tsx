@@ -250,6 +250,17 @@ function Tile({
               <ArrowUpRight className="size-4" strokeWidth={2.2} />
             </a>
           )}
+          {p.repo && (
+            <a
+              href={p.repo}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+            >
+              Ver el código
+              <ArrowUpRight className="size-4" strokeWidth={2.2} />
+            </a>
+          )}
         </div>
       </div>
       <div className={compact ? "mt-auto" : ""}>{children}</div>
@@ -313,16 +324,31 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
           {p.title}
         </h3>
         <p className="mt-4 text-pretty text-[21px] leading-[1.4]">{p.summary}</p>
-        {p.url && (
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
-          >
-            Ver la web
-            <ArrowUpRight className="size-4" strokeWidth={2.2} />
-          </a>
+        {(p.url || p.repo) && (
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1">
+            {p.url && (
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+              >
+                Ver la web
+                <ArrowUpRight className="size-4" strokeWidth={2.2} />
+              </a>
+            )}
+            {p.repo && (
+              <a
+                href={p.repo}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+              >
+                Ver el código
+                <ArrowUpRight className="size-4" strokeWidth={2.2} />
+              </a>
+            )}
+          </div>
         )}
 
         <div className="mt-10 border-t border-line pt-8">

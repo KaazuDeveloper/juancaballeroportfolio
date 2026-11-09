@@ -5,6 +5,8 @@ export const profile = {
   timezone: "Europe/Madrid",
   email: "juan.antonioccpp@gmail.com",
   linkedin: "https://www.linkedin.com/in/juanancaballero",
+  github: "https://github.com/KaazuDeveloper",
+  repo: "https://github.com/KaazuDeveloper/juancaballeroportfolio",
   itch: "https://itch.io/profile/kaazu-13",
   cv: "/cv-juan-caballero.pdf",
   languages: "ES · EN · IT",
@@ -35,6 +37,7 @@ export type Project = {
   stack: string[];
   games?: Game[];
   url?: string;
+  repo?: string;
 };
 
 export const projects: Project[] = [
@@ -56,6 +59,7 @@ export const projects: Project[] = [
     ],
     stack: ["Angular", "Node.js", "Express", "MongoDB", "Three.js", "Stripe"],
     url: "https://cajonescaballero.vercel.app",
+    repo: "https://github.com/KaazuDeveloper/cajonescaballero",
   },
   {
     title: "TPV y comandero",
