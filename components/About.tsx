@@ -17,8 +17,8 @@ export function About() {
         <div className="mt-12 grid gap-8 text-[19px] leading-[1.5] text-ink-2 md:mt-16 md:grid-cols-2 md:gap-14">
           <Reveal>
             <p className="text-pretty">
-              <span className="font-semibold text-ink">En el trabajo.</span> He pasado por empresas
-              de Córdoba y por una de Italia, en proyectos de escritorio, web y móvil: aplicaciones en
+              <span className="font-semibold text-ink">En el trabajo.</span> He trabajado en empresas
+              españolas e italianas, en proyectos de escritorio, web y móvil: aplicaciones en
               .NET, interfaces en Angular, apps en Flutter, servicios web y bases de datos con MySQL.
               Me muevo con soltura por todo el stack y aprendo lo que cada proyecto necesite.
             </p>

@@ -2,7 +2,7 @@ import { Reveal } from "./ui";
 
 const stats = [
   { value: "4", label: "plataformas", note: "Windows, web, Android e iOS" },
-  { value: "3", label: "empresas", note: "En Córdoba y en Italia" },
+  { value: "3", label: "empresas", note: "Españolas e italianas" },
   { value: "2", label: "países", note: "España e Italia" },
   { value: "3", label: "idiomas", note: "Español, inglés e italiano" },
 ];
