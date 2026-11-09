@@ -55,7 +55,7 @@ export const projects: Project[] = [
       "La demo publicada funciona con datos ficticios y pagos simulados.",
     ],
     stack: ["Angular", "Node.js", "Express", "MongoDB", "Three.js", "Stripe"],
-    url: "https://cajones-caballero.vercel.app",
+    url: "https://cajonescaballero.vercel.app",
   },
   {
     title: "TPV y comandero",
