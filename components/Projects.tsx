@@ -4,7 +4,19 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronRight, X } from "lucide-react";
 import { profile, projects, type Game, type Project } from "@/lib/content";
-import { ComanderoScreen, DashboardScreen, ErpScreen, Laptop, Phone, Screen, TpvScreen } from "./Devices";
+import {
+  ComanderoScreen,
+  DashboardScreen,
+  ElkPipelineScreen,
+  ErpScreen,
+  Laptop,
+  Phone,
+  Screen,
+  SeleniumScreen,
+  TiendaMovilScreen,
+  TiendaScreen,
+  TpvScreen,
+} from "./Devices";
 import { Reveal, ease } from "./ui";
 
 const byIcon = (icon: Project["icon"]) => projects.find((p) => p.icon === icon)!;
@@ -23,7 +35,8 @@ export function Projects() {
   };
 
   const tpv = byIcon("store");
-  const small = [byIcon("building"), byIcon("activity"), byIcon("gamepad")];
+  const tienda = byIcon("shop");
+  const small = [byIcon("building"), byIcon("gamepad"), byIcon("activity")];
 
   return (
     <section id="proyectos" className="scroll-mt-20 bg-mist px-3 py-20 md:px-5 md:py-28">
@@ -32,8 +45,8 @@ export function Projects() {
           Proyectos.
         </h2>
         <p className="mx-auto mt-3 max-w-[620px] text-pretty text-[19px] leading-[1.45] text-ink-2 md:text-[21px]">
-          Son proyectos de empresa, así que el código no es público. Esto es lo que hacen y con qué
-          están construidos.
+          La mayoría son proyectos de empresa, así que su código no es público. Esto es lo que hacen y
+          con qué están construidos.
         </p>
       </Reveal>
 
@@ -53,6 +66,21 @@ export function Projects() {
           </Tile>
         </Reveal>
 
+        <Reveal>
+          <Tile project={tienda} onOpen={(e) => show(tienda, e.currentTarget)}>
+            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
+              <Laptop>
+                <TiendaScreen />
+              </Laptop>
+              <div className="absolute bottom-[-2%] left-[-3%] w-[24%] md:left-[-6%] md:w-[21%]">
+                <Phone>
+                  <TiendaMovilScreen />
+                </Phone>
+              </div>
+            </div>
+          </Tile>
+        </Reveal>
+
         <div className="grid gap-3 md:grid-cols-3">
           {small.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.08} className="h-full">
@@ -64,9 +92,16 @@ export function Projects() {
                     </Screen>
                   )}
                   {p.icon === "activity" && (
-                    <Screen>
-                      <DashboardScreen />
-                    </Screen>
+                    <div className="relative pb-[32%]">
+                      <Screen width={720} height={300}>
+                        <ElkPipelineScreen compact />
+                      </Screen>
+                      <div className="absolute bottom-0 right-[-3%] w-[58%]">
+                        <Screen width={720} height={450}>
+                          <SeleniumScreen />
+                        </Screen>
+                      </div>
+                    </div>
                   )}
                   {p.games && (
                     <div className="grid grid-cols-2 gap-3">
@@ -84,6 +119,50 @@ export function Projects() {
 
       <AnimatePresence>{open && <Modal project={open} onClose={close} />}</AnimatePresence>
     </section>
+  );
+}
+
+const elkFigures = [
+  {
+    screen: (
+      <Screen width={720} height={450}>
+        <ElkPipelineScreen />
+      </Screen>
+    ),
+    caption: "Logstash recoge y transforma los datos, y Elasticsearch los indexa para poder buscar en ellos.",
+  },
+  {
+    screen: (
+      <Screen>
+        <DashboardScreen />
+      </Screen>
+    ),
+    caption: "Kibana convierte esos datos en paneles para ver de un vistazo qué está pasando.",
+  },
+  {
+    screen: (
+      <Screen width={720} height={450}>
+        <SeleniumScreen />
+      </Screen>
+    ),
+    caption: "Selenium controla el navegador y repite lo que haría un usuario para detectar fallos.",
+  },
+];
+
+function ElkFigures() {
+  return (
+    <div className="mt-8 border-t border-line pt-8">
+      <p className="text-[17px] font-semibold">Cómo funciona</p>
+      <div className="mt-5 space-y-7">
+        {elkFigures.map((f) => (
+          <figure key={f.caption}>
+            {f.screen}
+            <figcaption className="mt-3 text-[15px] leading-[1.4] text-ink-2">{f.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+      <p className="mt-6 text-[13px] text-ink-3">Ilustraciones propias; no muestran datos reales.</p>
+    </div>
   );
 }
 
@@ -149,16 +228,29 @@ function Tile({
         >
           {p.summary}
         </p>
-        <button
-          type="button"
-          onClick={onOpen}
-          className={`mt-4 inline-flex items-center gap-0.5 text-[17px] hover:underline ${
-            dark ? "text-[#2997ff]" : "text-link"
-          }`}
-        >
-          Más información
-          <ChevronRight className="size-4 translate-y-px" strokeWidth={2.2} />
-        </button>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+          <button
+            type="button"
+            onClick={onOpen}
+            className={`inline-flex items-center gap-0.5 text-[17px] hover:underline ${
+              dark ? "text-[#2997ff]" : "text-link"
+            }`}
+          >
+            Más información
+            <ChevronRight className="size-4 translate-y-px" strokeWidth={2.2} />
+          </button>
+          {p.url && (
+            <a
+              href={p.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+            >
+              Ver la web
+              <ArrowUpRight className="size-4" strokeWidth={2.2} />
+            </a>
+          )}
+        </div>
       </div>
       <div className={compact ? "mt-auto" : ""}>{children}</div>
     </article>
@@ -221,6 +313,17 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
           {p.title}
         </h3>
         <p className="mt-4 text-pretty text-[21px] leading-[1.4]">{p.summary}</p>
+        {p.url && (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex items-center gap-0.5 text-[17px] text-link hover:underline"
+          >
+            Ver la web
+            <ArrowUpRight className="size-4" strokeWidth={2.2} />
+          </a>
+        )}
 
         <div className="mt-10 border-t border-line pt-8">
           <p className="text-[17px] font-semibold">Qué hice</p>
@@ -233,6 +336,8 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
             ))}
           </ul>
         </div>
+
+        {p.icon === "activity" && <ElkFigures />}
 
         {p.games && (
           <div className="mt-8 border-t border-line pt-8">

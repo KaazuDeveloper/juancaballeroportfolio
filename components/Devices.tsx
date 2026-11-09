@@ -1,9 +1,9 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { motion, type MotionStyle } from "framer-motion";
-import { Minus, Plus } from "lucide-react";
-import { order, products, ticket } from "@/lib/demo";
+import { ChartColumn, Check, ChevronRight, FileText, Filter, Minus, MousePointer2, Plus, Search } from "lucide-react";
+import { TESTS, order, products, ticket } from "@/lib/demo";
 
 /* Renders children at a fixed design size and scales them to the container width. */
 export function Fit({ width, height, children }: { width: number; height: number; children: ReactNode }) {
@@ -199,6 +199,176 @@ export function DashboardScreen() {
             className="flex-1 rounded-t-[3px] bg-gradient-to-t from-[#0071e3] to-[#5ac8fa]"
             style={{ height: `${h}%` }}
           />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const elkSteps = [
+  { Icon: FileText, name: "Logs", note: "Apps y servidores", color: "#a1a1a6" },
+  { Icon: Filter, name: "Logstash", note: "Recoge y transforma", color: "#ff9f0a" },
+  { Icon: Search, name: "Elasticsearch", note: "Indexa y busca", color: "#30d158" },
+  { Icon: ChartColumn, name: "Kibana", note: "Visualiza", color: "#5ac8fa" },
+];
+
+const logLines = [
+  ["12:04:31", "INFO", "Pedido creado", "text-white/55"],
+  ["12:04:33", "WARN", "Latencia alta en la API", "text-[#ff9f0a]"],
+  ["12:04:36", "ERROR", "Tiempo de espera agotado", "text-[#ff453a]"],
+];
+
+/* Original illustration of the ELK data flow. Use at 720×450, or 720×300 with `compact`. */
+export function ElkPipelineScreen({ compact }: { compact?: boolean }) {
+  return (
+    <div className={`flex h-full flex-col bg-[#0f1117] font-sans text-white ${compact ? "p-6" : "p-8"}`}>
+      <div className="flex items-center justify-between text-[17px]">
+        <span className="font-semibold">Flujo de datos</span>
+        <span className="rounded-md bg-white/10 px-2.5 py-1 text-[14px] text-white/70">Stack ELK</span>
+      </div>
+      <div className={`flex items-center ${compact ? "mt-5" : "mt-7"}`}>
+        {elkSteps.map(({ Icon, name, note, color }, i) => (
+          <Fragment key={name}>
+            <div className="flex h-[176px] w-[138px] shrink-0 flex-col items-center justify-center rounded-2xl bg-white/[0.06] px-2 text-center">
+              <span
+                className="flex size-14 items-center justify-center rounded-full"
+                style={{ background: `${color}26`, color }}
+              >
+                <Icon className="size-7" strokeWidth={1.8} />
+              </span>
+              <p className="mt-3 text-[18px] font-semibold tracking-[-0.01em]">{name}</p>
+              <p className="mt-1 text-[13px] leading-[1.25] text-white/55">{note}</p>
+            </div>
+            {i < elkSteps.length - 1 && (
+              <div className="flex flex-1 items-center justify-center text-white/35">
+                <ChevronRight className="size-6" strokeWidth={2.2} />
+              </div>
+            )}
+          </Fragment>
+        ))}
+      </div>
+      {!compact && (
+        <div className="mt-auto rounded-xl bg-white/[0.06] px-4 py-3 font-mono text-[14px] leading-[1.7]">
+          {logLines.map(([time, level, msg, tone]) => (
+            <p key={time} className="flex gap-4">
+              <span className="text-white/40">{time}</span>
+              <span className={`w-[52px] font-semibold ${tone}`}>{level}</span>
+              <span className="text-white/75">{msg}</span>
+            </p>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* Original illustration of a Selenium run: a browser driven by the tests. Use at 720×450. */
+export function SeleniumScreen() {
+  const shown = TESTS.slice(0, 6);
+  return (
+    <div className="flex h-full flex-col bg-white font-sans text-[#1d1d1f]">
+      <div className="flex h-[48px] shrink-0 items-center gap-2 border-b border-black/10 bg-[#f5f5f7] px-4">
+        {["#ff5f57", "#febc2e", "#28c840"].map((c) => (
+          <span key={c} className="size-3 rounded-full" style={{ background: c }} />
+        ))}
+        <span className="ml-3 flex-1 rounded-md bg-white px-3 py-1 text-center text-[14px] text-[#6e6e73] ring-1 ring-black/5">
+          Navegador controlado por Selenium
+        </span>
+      </div>
+      <div className="flex min-h-0 flex-1">
+        <div className="relative w-[320px] shrink-0 p-6">
+          <p className="text-[22px] font-semibold tracking-[-0.02em]">Nuevo pedido</p>
+          <p className="mt-4 text-[13px] text-[#6e6e73]">Cliente</p>
+          <div className="mt-1 rounded-lg px-3 py-2 text-[16px] ring-1 ring-black/15">Cliente 1</div>
+          <p className="mt-3 text-[13px] text-[#6e6e73]">Producto</p>
+          <div className="mt-1 rounded-lg px-3 py-2 text-[16px] ring-2 ring-[#0071e3]">Producto A</div>
+          <div className="mt-5 inline-flex rounded-full bg-[#0071e3] px-6 py-2 text-[16px] font-medium text-white">
+            Guardar
+          </div>
+          <MousePointer2
+            className="absolute left-[100px] top-[262px] size-8 fill-[#1d1d1f] text-white"
+            strokeWidth={1.4}
+          />
+        </div>
+        <div className="flex min-w-0 flex-1 flex-col border-l border-black/10 bg-[#fafafa] p-5">
+          <p className="text-[17px] font-semibold">Pruebas</p>
+          <ul className="mt-3 space-y-[9px] text-[15px]">
+            {shown.map((t, i) => (
+              <li key={t} className="flex items-center gap-2.5">
+                {i < shown.length - 1 ? (
+                  <span className="flex size-[20px] shrink-0 items-center justify-center rounded-full bg-[#34c759] text-white">
+                    <Check className="size-3.5" strokeWidth={3.2} />
+                  </span>
+                ) : (
+                  <span className="size-[20px] shrink-0 rounded-full border-[3px] border-[#0071e3] border-t-transparent" />
+                )}
+                <span className="truncate">{t}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-auto text-[14px] text-[#6e6e73]">5 correctas · 1 en curso</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* The La Caja Caballero home page and shop, drawn at device size with the real product photos. */
+export function TiendaScreen() {
+  return (
+    <div className="flex h-full flex-col bg-black font-sans text-[#f5f5f7]">
+      <div className="flex h-[38px] shrink-0 items-center justify-between bg-[#161617] px-8 text-[12px]">
+        <span className="font-semibold">La Caja Caballero</span>
+        <span className="flex gap-6 text-[#d2d2d7]">
+          <span>Tienda</span>
+          <span>Personaliza</span>
+          <span>Tutoriales</span>
+          <span>Nosotros</span>
+        </span>
+      </div>
+      <div className="flex flex-1 items-center justify-between pl-[225px] pr-6">
+        <div>
+          <p className="text-[15px] font-semibold text-[#ff9a55]">Hechos a mano en Córdoba</p>
+          <p className="mt-2 text-[62px] font-semibold leading-none tracking-[-0.045em]">
+            Tu cajón.
+            <br />
+            Tu sonido.
+          </p>
+          <p className="mt-5 max-w-[320px] text-[17px] leading-[1.35] text-[#a1a1a6]">
+            Listos para tocar, o diseñados por ti de la madera a la última pincelada.
+          </p>
+          <span className="mt-6 inline-flex rounded-full bg-white px-6 py-2.5 text-[15px] text-[#1d1d1f]">
+            Diseña el tuyo
+          </span>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/proyectos/caja/hero.png" alt="" className="h-[430px] w-[370px] object-contain" />
+      </div>
+    </div>
+  );
+}
+
+const tiendaProductos = [
+  ["Cajón Clásico", "129,99 €", "clasico.png"],
+  ["Cajón Estudio", "189,50 €", "estudio.jpg"],
+  ["Cajón Marea", "239,00 €", "marea.jpg"],
+  ["Cajón Ébano", "289,00 €", "ebano.jpg"],
+];
+
+export function TiendaMovilScreen() {
+  return (
+    <div className="h-full bg-white px-5 pt-16 font-sans text-[#1d1d1f]">
+      <p className="text-[42px] font-semibold tracking-[-0.04em]">La tienda.</p>
+      <div className="mt-6 grid grid-cols-2 gap-x-3 gap-y-5">
+        {tiendaProductos.map(([nombre, precio, foto]) => (
+          <div key={nombre}>
+            <div className="flex aspect-square items-center justify-center rounded-[18px] bg-[#f5f5f7] p-5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/proyectos/caja/${foto}`} alt="" className="h-full w-full object-contain mix-blend-multiply" />
+            </div>
+            <p className="mt-2.5 text-[17px] font-semibold">{nombre}</p>
+            <p className="text-[15px] text-[#6e6e73]">{precio}</p>
+          </div>
         ))}
       </div>
     </div>

@@ -13,7 +13,7 @@ export const profile = {
 };
 
 export type Tint = "blue" | "green" | "orange" | "red" | "purple" | "pink" | "indigo" | "teal";
-export type IconName = "phone" | "store" | "building" | "activity" | "gamepad";
+export type IconName = "phone" | "store" | "shop" | "building" | "activity" | "gamepad";
 
 export type Game = {
   title: string;
@@ -34,9 +34,29 @@ export type Project = {
   details: string[];
   stack: string[];
   games?: Game[];
+  url?: string;
 };
 
 export const projects: Project[] = [
+  {
+    title: "La Caja Caballero",
+    icon: "shop",
+    tint: "orange",
+    kind: "Tienda online · proyecto de fin de grado",
+    year: "2024 — 26",
+    context: "Proyecto de fin de grado",
+    summary:
+      "Tienda de cajones flamencos con personalizador 3D: eliges la madera, pintas la tapa y ves el resultado antes de comprarlo.",
+    details: [
+      "Personalizador en 3D con Three.js y editor de dibujo sobre la tapa con Fabric.js.",
+      "Front en Angular, API en Node con Express y base de datos MongoDB.",
+      "Pagos con Stripe, registro con verificación por correo y panel de administración.",
+      "Actualizado a Angular 22, rediseñado entero y con la API protegida por tokens y pruebas automatizadas.",
+      "La demo publicada funciona con datos ficticios y pagos simulados.",
+    ],
+    stack: ["Angular", "Node.js", "Express", "MongoDB", "Three.js", "Stripe"],
+    url: "https://cajones-caballero.vercel.app",
+  },
   {
     title: "TPV y comandero",
     icon: "store",
