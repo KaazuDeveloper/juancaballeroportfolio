@@ -9,6 +9,8 @@ import {
   DashboardScreen,
   ElkPipelineScreen,
   ErpScreen,
+  HiloRojoMovilScreen,
+  HiloRojoScreen,
   Laptop,
   Phone,
   Screen,
@@ -34,9 +36,10 @@ export function Projects() {
     opener.current?.focus();
   };
 
-  const tpv = byIcon("store");
+  const hilo = byIcon("camera");
   const tienda = byIcon("shop");
-  const small = [byIcon("building"), byIcon("gamepad"), byIcon("activity")];
+  /* El TPV va en pequeño: es de la empresa actual y no se muestran capturas reales. */
+  const small = [byIcon("store"), byIcon("building"), byIcon("gamepad"), byIcon("activity")];
 
   return (
     <section id="proyectos" className="scroll-mt-20 bg-mist px-3 py-20 md:px-5 md:py-28">
@@ -52,14 +55,14 @@ export function Projects() {
 
       <div className="mx-auto mt-12 grid max-w-[1240px] gap-3 md:mt-16">
         <Reveal>
-          <Tile project={tpv} onOpen={(e) => show(tpv, e.currentTarget)} dark>
+          <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)} dark>
             <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
               <Laptop>
-                <TpvScreen />
+                <HiloRojoScreen />
               </Laptop>
               <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
                 <Phone>
-                  <ComanderoScreen />
+                  <HiloRojoMovilScreen />
                 </Phone>
               </div>
             </div>
@@ -81,11 +84,23 @@ export function Projects() {
           </Tile>
         </Reveal>
 
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {small.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.08} className="h-full">
               <Tile project={p} onOpen={(e) => show(p, e.currentTarget)} compact>
                 <div className="mt-8 px-6">
+                  {p.icon === "store" && (
+                    <div className="relative pb-[8%]">
+                      <Screen>
+                        <TpvScreen />
+                      </Screen>
+                      <div className="absolute bottom-0 right-[-2%] w-[22%]">
+                        <Phone>
+                          <ComanderoScreen />
+                        </Phone>
+                      </div>
+                    </div>
+                  )}
                   {p.icon === "building" && (
                     <Screen>
                       <ErpScreen />
@@ -211,6 +226,12 @@ function Tile({
       } ${compact ? "pb-8 pt-10" : "pb-0 pt-12 md:pt-14"}`}
     >
       <div className="px-6">
+        {p.badge && (
+          <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e0442f]/15 px-3 py-1 text-[13px] font-semibold text-[#ff6b55]">
+            <span className="size-1.5 rounded-full bg-[#ff6b55]" />
+            {p.badge}
+          </p>
+        )}
         <p className={`text-[14px] font-semibold ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>
           {p.kind} · {p.year}
         </p>
@@ -315,6 +336,7 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
         </button>
 
         <p className="text-[14px] font-semibold text-ink-2">
+          {p.badge && <span className="text-[#d23a27]">{p.badge} · </span>}
           {p.kind} · {p.year}
         </p>
         <h3

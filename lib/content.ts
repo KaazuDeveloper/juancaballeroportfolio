@@ -15,7 +15,7 @@ export const profile = {
 };
 
 export type Tint = "blue" | "green" | "orange" | "red" | "purple" | "pink" | "indigo" | "teal";
-export type IconName = "phone" | "store" | "shop" | "building" | "activity" | "gamepad";
+export type IconName = "phone" | "store" | "shop" | "building" | "activity" | "gamepad" | "camera";
 
 export type Game = {
   title: string;
@@ -38,9 +38,32 @@ export type Project = {
   games?: Game[];
   url?: string;
   repo?: string;
+  /* Etiqueta destacada encima del título, por ejemplo "El más reciente". */
+  badge?: string;
 };
 
 export const projects: Project[] = [
+  {
+    title: "El hilo rojo",
+    icon: "camera",
+    tint: "red",
+    kind: "Web para un estudio de bodas",
+    year: "2026",
+    context: "Encargo para El hilo rojo, fotografía y vídeo de bodas",
+    summary:
+      "La web de un estudio de fotografía y vídeo de bodas: un hilo rojo recorre la página mientras bajas, y el estudio gestiona sus fechas, sus fotos y sus visitas desde una zona privada.",
+    details: [
+      "Un hilo rojo dibujado en SVG que se traza al bajar, se anuda entre secciones y termina en un corazón.",
+      "Calendario de días libres y ocupados que el estudio marca desde el móvil, día a día o por días de la semana.",
+      "Gestión de fotos: se reducen solas antes de subirlas y se ordenan arrastrándolas.",
+      "Estadísticas de visitas sin cookies y el uso diario frente a los límites del plan gratuito.",
+      "Web estática en Next.js con funciones y almacenamiento en Cloudflare, todo en planes gratuitos.",
+      "Hecha a partir de una plantilla propia para fotógrafos, con su código público.",
+    ],
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cloudflare", "SVG"],
+    url: "https://el-hilo-rojo.vercel.app",
+    badge: "El más reciente",
+  },
   {
     title: "La Caja Caballero",
     icon: "shop",

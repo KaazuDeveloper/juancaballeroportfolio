@@ -4,6 +4,9 @@ import { Fragment, useLayoutEffect, useRef, useState, type ReactNode } from "rea
 import { motion, type MotionStyle } from "framer-motion";
 import { ChartColumn, Check, ChevronRight, FileText, Filter, Minus, MousePointer2, Plus, Search } from "lucide-react";
 import { TESTS, order, products, ticket } from "@/lib/demo";
+import { Playfair_Display } from "next/font/google";
+
+const serif = Playfair_Display({ subsets: ["latin"], weight: "400", display: "swap" });
 
 /* Renders children at a fixed design size and scales them to the container width. */
 export function Fit({ width, height, children }: { width: number; height: number; children: ReactNode }) {
@@ -424,6 +427,95 @@ export function Screen({ children, width = 960, height = 600 }: { children: Reac
       <Fit width={width} height={height}>
         {children}
       </Fit>
+    </div>
+  );
+}
+
+const hiloLibres = new Set([13, 14, 15, 22, 28, 29]);
+const hiloOcupados = new Set([21, 25]);
+
+export function HiloRojoScreen() {
+  return (
+    <div className="relative h-full overflow-hidden bg-[#262626] font-sans text-white">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/proyectos/hilo-rojo/portada.jpg" alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/65" />
+      <div className="relative flex h-[44px] items-center justify-between px-8 text-[12px]">
+        <span className={`${serif.className} text-[17px]`}>
+          El hilo <span className="text-[#ff5a43]">rojo</span>
+        </span>
+        <span className="flex items-center gap-5 text-white/85">
+          <span>Trabajos</span>
+          <span>Cómo trabajamos</span>
+          <span>Fechas</span>
+          <span>Nosotros</span>
+          <span className="rounded-full bg-white px-3.5 py-1.5 text-[#1d1d1f]">Pedir tarifas</span>
+        </span>
+      </div>
+      <div className="absolute inset-x-8 bottom-9 flex items-end justify-between">
+        <p className={`${serif.className} text-[76px] leading-none tracking-[-0.02em]`}>
+          El hilo <span className="text-[#ff5a43]">rojo</span>
+        </p>
+        <p className="mb-2 max-w-[250px] text-[14px] leading-[1.35]">
+          Fotografía y vídeo documental de bodas en Córdoba y Badajoz. Luz, acción, emoción, mucho amor y un toque canalla.
+        </p>
+      </div>
+      <svg viewBox="0 0 960 600" className="absolute inset-0 h-full w-full" fill="none" aria-hidden>
+        <path
+          d="M222 588 C250 592 290 585 318 589 C360 595 380 560 400 600"
+          stroke="#e0442f"
+          strokeWidth="2.6"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+export function HiloRojoMovilScreen() {
+  return (
+    <div className="relative h-full bg-white pt-14 font-sans text-[#232323]">
+      <div className="flex items-center justify-between px-5 text-[14px]">
+        <span className={`${serif.className} text-[19px]`}>
+          El hilo <span className="text-[#c93623]">rojo</span>
+        </span>
+        <span>Menú</span>
+      </div>
+      <div className="px-5 pt-10">
+        <p className={`${serif.className} text-[38px] leading-[1.05]`}>Fechas disponibles</p>
+        <p className="mt-3 text-[15px] leading-[1.4] text-[#6b6b70]">
+          Elige un día libre y os enviamos nuestras tarifas. Los días en rojo ya están ocupados.
+        </p>
+        <p className="mt-7 text-[17px] font-semibold">Noviembre de 2026</p>
+        <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[14px]">
+          {["L", "M", "X", "J", "V", "S", "D"].map((d) => (
+            <span key={d} className="py-1 text-[12px] text-[#6b6b70]">{d}</span>
+          ))}
+          {Array.from({ length: 6 }, (_, i) => <span key={`h${i}`} />)}
+          {Array.from({ length: 30 }, (_, i) => {
+            const dia = i + 1;
+            const libre = hiloLibres.has(dia);
+            const ocupado = hiloOcupados.has(dia);
+            return (
+              <span
+                key={dia}
+                className={`flex aspect-square items-center justify-center rounded-full ${
+                  libre ? "bg-[#232323] text-white" : ocupado ? "bg-[#c93623] text-white line-through" : dia < 10 ? "text-[#c7c7cc]" : ""
+                }`}
+              >
+                {dia}
+              </span>
+            );
+          })}
+        </div>
+        <div className="mt-4 flex gap-5 text-[13px] text-[#6b6b70]">
+          <span className="flex items-center gap-1.5"><span className="size-3 rounded-full bg-[#232323]" />Libre</span>
+          <span className="flex items-center gap-1.5"><span className="size-3 rounded-full bg-[#c93623]" />Ocupado</span>
+        </div>
+      </div>
+      <svg viewBox="0 0 390 844" className="absolute inset-0 h-full w-full" fill="none" aria-hidden>
+        <path d="M372 0 C366 120 380 210 370 330 C362 430 378 520 368 640 C362 720 376 790 370 844" stroke="#e0442f" strokeWidth="2.4" strokeLinecap="round" />
+      </svg>
     </div>
   );
 }
