@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Check, ChevronRight, X } from "lucide-react";
+import { Activity, ArrowUpRight, Building2, Camera, Check, ChevronLeft, ChevronRight, Dices, Gamepad2, ShoppingBag, Smartphone, Store, X } from "lucide-react";
 import { profile, projects, type Category, type Game, type Project } from "@/lib/content";
 import {
   ComanderoScreen,
@@ -25,9 +25,39 @@ import { Reveal, ease } from "./ui";
 
 const byIcon = (icon: Project["icon"]) => projects.find((p) => p.icon === icon)!;
 
+/* Iconos y colores de las tarjetas pequeñas. */
+const ICONOS: Record<Project["icon"], typeof Store> = {
+  phone: Smartphone,
+  store: Store,
+  shop: ShoppingBag,
+  building: Building2,
+  activity: Activity,
+  gamepad: Gamepad2,
+  camera: Camera,
+  dice: Dices,
+};
+const TINTES: Record<Project["tint"], string> = {
+  blue: "bg-[#0071e3]/10 text-[#0071e3]",
+  green: "bg-[#1d9b5a]/10 text-[#1d9b5a]",
+  orange: "bg-[#e8710a]/10 text-[#e8710a]",
+  red: "bg-[#d23a27]/10 text-[#d23a27]",
+  purple: "bg-[#8e44d6]/10 text-[#8e44d6]",
+  pink: "bg-[#d6336c]/10 text-[#d6336c]",
+  indigo: "bg-[#4f46e5]/10 text-[#4f46e5]",
+  teal: "bg-[#0f9b9b]/10 text-[#0f9b9b]",
+};
+
+type Filtro = "todos" | Category;
+const FILTROS: { id: Filtro; nombre: string }[] = [
+  { id: "todos", nombre: "Todos" },
+  { id: "webapp", nombre: "Web apps" },
+  { id: "landing", nombre: "Landing pages" },
+];
+
 export function Projects() {
   const [open, setOpen] = useState<Project | null>(null);
   const opener = useRef<HTMLElement | null>(null);
+  const [filtro, setFiltro] = useState<Filtro>("todos");
 
   const show = (p: Project, el: HTMLElement) => {
     opener.current = el;
@@ -38,71 +68,41 @@ export function Projects() {
     opener.current?.focus();
   };
 
-  const tlp = byIcon("dice");
-  const hilo = byIcon("camera");
-  const tienda = byIcon("shop");
-
-  /* Cada grupo con sus proyectos grandes (con ilustración en portátil y móvil) y pequeños. */
-  const grupos: { id: Category; titulo: string; texto: string; pequenos: Project[] }[] = [
-    { id: "webapp", titulo: "Web apps", texto: "Aplicaciones con cuentas, datos y lógica detrás.", pequenos: [byIcon("building")] },
-    { id: "landing", titulo: "Landing pages", texto: "Webs para presentar un negocio y conseguir clientes.", pequenos: [] },
-    { id: "otro", titulo: "Más proyectos", texto: "Software de escritorio y móvil, datos y videojuegos.", pequenos: [byIcon("store"), byIcon("activity"), byIcon("gamepad")] },
+  /* Los que se pueden enseñar, con su ilustración en portátil y móvil, van en el carrusel. */
+  const destacados: { project: Project; dark?: boolean; escena: ReactNode }[] = [
+    {
+      project: byIcon("dice"),
+      dark: true,
+      escena: (
+        <Dispositivos movilDerecha movil={<TrasLaPantallaMovilScreen />}>
+          <TrasLaPantallaScreen />
+        </Dispositivos>
+      ),
+    },
+    {
+      project: byIcon("shop"),
+      escena: (
+        <Dispositivos movil={<TiendaMovilScreen />}>
+          <TiendaScreen />
+        </Dispositivos>
+      ),
+    },
+    {
+      project: byIcon("camera"),
+      dark: true,
+      escena: (
+        <Dispositivos movilDerecha movil={<HiloRojoMovilScreen />}>
+          <HiloRojoScreen />
+        </Dispositivos>
+      ),
+    },
   ];
-
-  const grandes: Record<Category, ReactNode> = {
-    webapp: (
-      <>
-        <Reveal>
-          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark>
-            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
-              <Laptop>
-                <TrasLaPantallaScreen />
-              </Laptop>
-              <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
-                <Phone>
-                  <TrasLaPantallaMovilScreen />
-                </Phone>
-              </div>
-            </div>
-          </Tile>
-        </Reveal>
-        <Reveal>
-          <Tile project={tienda} onOpen={(e) => show(tienda, e.currentTarget)}>
-            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
-              <Laptop>
-                <TiendaScreen />
-              </Laptop>
-              <div className="absolute bottom-[-2%] left-[-3%] w-[24%] md:left-[-6%] md:w-[21%]">
-                <Phone>
-                  <TiendaMovilScreen />
-                </Phone>
-              </div>
-            </div>
-          </Tile>
-        </Reveal>
-      </>
-    ),
-    landing: (
-      <Reveal>
-        <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)} dark>
-          <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
-            <Laptop>
-              <HiloRojoScreen />
-            </Laptop>
-            <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
-              <Phone>
-                <HiloRojoMovilScreen />
-              </Phone>
-            </div>
-          </div>
-        </Tile>
-      </Reveal>
-    ),
-    otro: null,
-  };
+  const visibles = destacados.filter((d) => filtro === "todos" || d.project.category === filtro);
+  /* Los de empresa, sin capturas reales, y los juegos van debajo en cuadrados. */
+  const resto = projects.filter((p) => !destacados.some((d) => d.project === p));
 
   return (
-    <section id="proyectos" className="scroll-mt-20 bg-mist px-3 py-20 md:px-5 md:py-28">
+    <section id="proyectos" className="scroll-mt-20 overflow-hidden bg-mist px-3 py-20 md:px-5 md:py-28">
       <Reveal className="mx-auto max-w-[980px] px-2 text-center">
         <h2 className="font-display text-[clamp(2.5rem,6vw,4rem)] font-semibold tracking-[-0.035em]">
           Proyectos.
@@ -113,74 +113,173 @@ export function Projects() {
         </p>
       </Reveal>
 
-      <div className="mx-auto mt-12 max-w-[1240px] space-y-16 md:mt-16 md:space-y-24">
-        {grupos.map((g) => (
-          <div key={g.id}>
-            <Reveal className="mb-6 px-2 text-center md:mb-8">
-              <h3 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.03em]">{g.titulo}</h3>
-              <p className="mt-1.5 text-[17px] text-ink-2 md:text-[19px]">{g.texto}</p>
-            </Reveal>
-            <div className="grid gap-3">
-              {grandes[g.id]}
-              {g.pequenos.length > 0 && (
-                <div className="grid gap-3 md:grid-cols-2">
-                  {g.pequenos.map((p, i) => (
-                    <Reveal
-                      key={p.title}
-                      delay={i * 0.08}
-                      className={`h-full ${g.pequenos.length % 2 === 1 && i === g.pequenos.length - 1 ? "md:col-span-2" : ""}`}
-                    >
-                      <Tile project={p} onOpen={(e) => show(p, e.currentTarget)} compact>
-                        <div className={`mt-8 px-6 ${g.pequenos.length % 2 === 1 && i === g.pequenos.length - 1 ? "mx-auto w-full max-w-[640px]" : ""}`}>
-                          {p.icon === "store" && (
-                            <div className="relative pb-[8%]">
-                              <Screen>
-                                <TpvScreen />
-                              </Screen>
-                              <div className="absolute bottom-0 right-[-2%] w-[22%]">
-                                <Phone>
-                                  <ComanderoScreen />
-                                </Phone>
-                              </div>
-                            </div>
-                          )}
-                          {p.icon === "building" && (
-                            <Screen>
-                              <ErpScreen />
-                            </Screen>
-                          )}
-                          {p.icon === "activity" && (
-                            <div className="relative pb-[32%]">
-                              <Screen width={720} height={300}>
-                                <ElkPipelineScreen compact />
-                              </Screen>
-                              <div className="absolute bottom-0 right-[-3%] w-[58%]">
-                                <Screen width={720} height={450}>
-                                  <SeleniumScreen />
-                                </Screen>
-                              </div>
-                            </div>
-                          )}
-                          {p.games && (
-                            <div className="grid grid-cols-2 gap-3">
-                              {p.games.map((gm) => (
-                                <GameCard key={gm.title} game={gm} />
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </Tile>
-                    </Reveal>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+      {/* Filtros */}
+      <Reveal className="mt-10 flex justify-center">
+        <div role="tablist" aria-label="Tipo de proyecto" className="inline-flex rounded-full bg-[#e8e8ed] p-1">
+          {FILTROS.map((f) => {
+            const n = f.id === "todos" ? destacados.length : destacados.filter((d) => d.project.category === f.id).length;
+            return (
+              <button
+                key={f.id}
+                type="button"
+                role="tab"
+                aria-selected={filtro === f.id}
+                onClick={() => setFiltro(f.id)}
+                className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors md:px-5 ${
+                  filtro === f.id ? "bg-paper text-ink shadow-[0_1px_4px_rgba(0,0,0,0.12)]" : "text-ink-2 hover:text-ink"
+                }`}
+              >
+                {f.nombre} <span className="text-ink-3">{n}</span>
+              </button>
+            );
+          })}
+        </div>
+      </Reveal>
+
+      <Carrusel key={filtro}>
+        {visibles.map((d) => (
+          <Tile key={d.project.title} project={d.project} onOpen={(e) => show(d.project, e.currentTarget)} dark={d.dark}>
+            {d.escena}
+          </Tile>
         ))}
+      </Carrusel>
+
+      {/* El resto, en cuadrados compactos */}
+      <div className="mx-auto mt-20 max-w-[1240px] md:mt-24">
+        <Reveal className="mb-6 px-2 text-center md:mb-8">
+          <h3 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.03em]">Más proyectos.</h3>
+          <p className="mt-1.5 text-[17px] text-ink-2 md:text-[19px]">Software de empresa, datos y videojuegos.</p>
+        </Reveal>
+        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {resto.map((p, i) => {
+            const I = ICONOS[p.icon];
+            return (
+              <Reveal key={p.title} delay={i * 0.06} className="h-full">
+                <li className="h-full">
+                  <button
+                    type="button"
+                    onClick={(e) => show(p, e.currentTarget)}
+                    className="group flex h-full w-full flex-col items-start rounded-[22px] bg-paper p-4 text-left transition-all duration-300 sm:p-6 hover:-translate-y-1 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.35)] lg:aspect-square"
+                  >
+                    <span className={`flex size-11 items-center justify-center rounded-[12px] ${TINTES[p.tint]}`}>
+                      <I className="size-[22px]" strokeWidth={1.9} />
+                    </span>
+                    <span className="mt-4 text-[12px] font-semibold leading-[1.3] text-ink-2 sm:mt-5 sm:text-[13px]">
+                      {p.kind} · {p.year}
+                    </span>
+                    <h4 className="mt-1 font-display text-[18px] font-semibold leading-[1.15] tracking-[-0.02em] sm:text-[21px]">{p.title}</h4>
+                    <span className="mt-2 line-clamp-3 hidden text-[15px] leading-[1.4] text-ink-2 sm:block">{p.summary}</span>
+                    <span className="mt-auto inline-flex items-center gap-0.5 pt-3 text-[14px] text-link group-hover:underline sm:pt-4 sm:text-[15px]">
+                      Más información
+                      <ChevronRight className="size-4 translate-y-px" strokeWidth={2.2} />
+                    </span>
+                  </button>
+                </li>
+              </Reveal>
+            );
+          })}
+        </ul>
       </div>
 
       <AnimatePresence>{open && <Modal project={open} onClose={close} />}</AnimatePresence>
     </section>
+  );
+}
+
+/* Portátil con un móvil encima, a un lado. */
+function Dispositivos({ children, movil, movilDerecha }: { children: ReactNode; movil: ReactNode; movilDerecha?: boolean }) {
+  return (
+    <div className="relative mx-auto mt-10 w-[90%] max-w-[760px]">
+      <Laptop>{children}</Laptop>
+      <div className={`absolute bottom-[-2%] w-[24%] md:w-[21%] ${movilDerecha ? "right-[-3%] md:right-[-6%]" : "left-[-3%] md:left-[-6%]"}`}>
+        <Phone>{movil}</Phone>
+      </div>
+    </div>
+  );
+}
+
+/* Carrusel con desplazamiento nativo (se arrastra con el dedo), flechas y puntos. */
+function Carrusel({ children }: { children: ReactNode[] }) {
+  const pista = useRef<HTMLDivElement>(null);
+  const [actual, setActual] = useState(0);
+  const total = children.length;
+
+  const ir = (i: number) => {
+    const el = pista.current;
+    const hijo = el?.children[i] as HTMLElement | undefined;
+    if (!el || !hijo) return;
+    setActual(i);
+    const r = hijo.getBoundingClientRect();
+    const p = el.getBoundingClientRect();
+    el.scrollBy({ left: r.left + r.width / 2 - (p.left + p.width / 2), behavior: "smooth" });
+  };
+
+  const alDesplazar = () => {
+    const el = pista.current;
+    if (!el) return;
+    const p = el.getBoundingClientRect();
+    const centro = p.left + p.width / 2;
+    let mejor = 0;
+    let distancia = Infinity;
+    [...el.children].forEach((h, i) => {
+      const r = h.getBoundingClientRect();
+      const c = r.left + r.width / 2;
+      if (Math.abs(c - centro) < distancia) {
+        distancia = Math.abs(c - centro);
+        mejor = i;
+      }
+    });
+    setActual(mejor);
+  };
+
+  return (
+    <div className="-mx-3 mt-8 md:-mx-5">
+      <div
+        ref={pista}
+        onScroll={alDesplazar}
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[6vw] pb-2 [scrollbar-width:none] md:px-[max(40px,calc((100vw-1120px)/2))] [&::-webkit-scrollbar]:hidden"
+      >
+        {children.map((hijo, i) => (
+          <div key={i} className="w-[88vw] max-w-[1120px] shrink-0 snap-center md:w-[min(1120px,84vw)]" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${total}`}>
+            {hijo}
+          </div>
+        ))}
+      </div>
+      {total > 1 && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <button
+            type="button"
+            onClick={() => ir(Math.max(0, actual - 1))}
+            disabled={actual === 0}
+            aria-label="Proyecto anterior"
+            className="flex size-10 items-center justify-center rounded-full bg-[#e8e8ed] text-ink transition-colors hover:bg-[#dcdce1] disabled:opacity-35"
+          >
+            <ChevronLeft className="size-5" strokeWidth={2.2} />
+          </button>
+          <div className="flex gap-2">
+            {children.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => ir(i)}
+                aria-label={`Ir al proyecto ${i + 1}`}
+                aria-current={i === actual}
+                className={`h-2 rounded-full transition-all duration-300 ${i === actual ? "w-6 bg-ink" : "w-2 bg-[#c7c7cc] hover:bg-ink-3"}`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => ir(Math.min(total - 1, actual + 1))}
+            disabled={actual === total - 1}
+            aria-label="Proyecto siguiente"
+            className="flex size-10 items-center justify-center rounded-full bg-[#e8e8ed] text-ink transition-colors hover:bg-[#dcdce1] disabled:opacity-35"
+          >
+            <ChevronRight className="size-5" strokeWidth={2.2} />
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -236,22 +335,6 @@ function GameCover({ game: g, className }: { game: Game; className: string }) {
   );
 }
 
-function GameCard({ game: g }: { game: Game }) {
-  return (
-    <a href={g.url} target="_blank" rel="noreferrer" className="group block text-left">
-      <span className="block overflow-hidden rounded-[14px] bg-mist">
-        <GameCover
-          game={g}
-          className="aspect-[315/250] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-        />
-      </span>
-      <span className="mt-2.5 block text-[15px] font-semibold leading-[1.25] tracking-[-0.01em] group-hover:underline">
-        {g.title}
-      </span>
-      <span className="mt-0.5 block text-[13px] leading-[1.3] text-ink-2">{g.jam}</span>
-    </a>
-  );
-}
 
 function Tile({
   project: p,
@@ -443,6 +526,23 @@ function Modal({ project: p, onClose }: { project: Project; onClose: () => void 
         </div>
 
         {p.icon === "activity" && <ElkFigures />}
+
+        {(p.icon === "store" || p.icon === "building") && (
+          <div className="mt-8 border-t border-line pt-8">
+            <p className="text-[17px] font-semibold">Cómo es</p>
+            <div className="relative mt-5 pb-[8%]">
+              <Screen>{p.icon === "store" ? <TpvScreen /> : <ErpScreen />}</Screen>
+              {p.icon === "store" && (
+                <div className="absolute bottom-0 right-[-2%] w-[22%]">
+                  <Phone>
+                    <ComanderoScreen />
+                  </Phone>
+                </div>
+              )}
+            </div>
+            <p className="mt-6 text-[13px] text-ink-3">Ilustración propia; no muestra datos reales de la empresa.</p>
+          </div>
+        )}
 
         {p.games && (
           <div className="mt-8 border-t border-line pt-8">
