@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, ChevronRight, X } from "lucide-react";
-import { profile, projects, type Game, type Project } from "@/lib/content";
+import { profile, projects, type Category, type Game, type Project } from "@/lib/content";
 import {
   ComanderoScreen,
   DashboardScreen,
@@ -18,11 +18,8 @@ import {
   TiendaMovilScreen,
   TiendaScreen,
   TpvScreen,
-  TrasLaPantallaFondo,
   TrasLaPantallaMovilScreen,
-  TrasLaPantallaMusica,
   TrasLaPantallaScreen,
-  TrasLaPantallaTirada,
 } from "./Devices";
 import { Reveal, ease } from "./ui";
 
@@ -44,42 +41,23 @@ export function Projects() {
   const tlp = byIcon("dice");
   const hilo = byIcon("camera");
   const tienda = byIcon("shop");
-  /* El TPV va en pequeño: es de la empresa actual y no se muestran capturas reales. */
-  const small = [byIcon("store"), byIcon("building"), byIcon("gamepad"), byIcon("activity")];
 
-  return (
-    <section id="proyectos" className="scroll-mt-20 bg-mist px-3 py-20 md:px-5 md:py-28">
-      <Reveal className="mx-auto max-w-[980px] px-2 text-center">
-        <h2 className="font-display text-[clamp(2.5rem,6vw,4rem)] font-semibold tracking-[-0.035em]">
-          Proyectos.
-        </h2>
-        <p className="mx-auto mt-3 max-w-[620px] text-pretty text-[19px] leading-[1.45] text-ink-2 md:text-[21px]">
-          La mayoría son proyectos de empresa, así que su código no es público. Esto es lo que hacen y
-          con qué están construidos.
-        </p>
-      </Reveal>
+  /* Cada grupo con sus proyectos grandes (con ilustración en portátil y móvil) y pequeños. */
+  const grupos: { id: Category; titulo: string; texto: string; pequenos: Project[] }[] = [
+    { id: "webapp", titulo: "Web apps", texto: "Aplicaciones con cuentas, datos y lógica detrás.", pequenos: [byIcon("building")] },
+    { id: "landing", titulo: "Landing pages", texto: "Webs para presentar un negocio y conseguir clientes.", pequenos: [] },
+    { id: "otro", titulo: "Más proyectos", texto: "Software de escritorio y móvil, datos y videojuegos.", pequenos: [byIcon("store"), byIcon("activity"), byIcon("gamepad")] },
+  ];
 
-      <div className="mx-auto mt-12 grid max-w-[1240px] gap-3 md:mt-16">
+  const grandes: Record<Category, ReactNode> = {
+    webapp: (
+      <>
         <Reveal>
-          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark backdrop={<TrasLaPantallaFondo />}>
+          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark>
             <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
               <Laptop>
                 <TrasLaPantallaScreen />
               </Laptop>
-              <motion.div
-                className="absolute left-[-9%] top-[18%] hidden w-[230px] md:block"
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <TrasLaPantallaTirada />
-              </motion.div>
-              <motion.div
-                className="absolute bottom-[14%] left-[-10%] hidden w-[250px] md:block"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              >
-                <TrasLaPantallaMusica />
-              </motion.div>
               <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
                 <Phone>
                   <TrasLaPantallaMovilScreen />
@@ -88,22 +66,6 @@ export function Projects() {
             </div>
           </Tile>
         </Reveal>
-
-        <Reveal>
-          <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)}>
-            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
-              <Laptop>
-                <HiloRojoScreen />
-              </Laptop>
-              <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
-                <Phone>
-                  <HiloRojoMovilScreen />
-                </Phone>
-              </div>
-            </div>
-          </Tile>
-        </Reveal>
-
         <Reveal>
           <Tile project={tienda} onOpen={(e) => show(tienda, e.currentTarget)}>
             <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
@@ -118,53 +80,103 @@ export function Projects() {
             </div>
           </Tile>
         </Reveal>
+      </>
+    ),
+    landing: (
+      <Reveal>
+        <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)} dark>
+          <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
+            <Laptop>
+              <HiloRojoScreen />
+            </Laptop>
+            <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
+              <Phone>
+                <HiloRojoMovilScreen />
+              </Phone>
+            </div>
+          </div>
+        </Tile>
+      </Reveal>
+    ),
+    otro: null,
+  };
 
-        <div className="grid gap-3 md:grid-cols-2">
-          {small.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08} className="h-full">
-              <Tile project={p} onOpen={(e) => show(p, e.currentTarget)} compact>
-                <div className="mt-8 px-6">
-                  {p.icon === "store" && (
-                    <div className="relative pb-[8%]">
-                      <Screen>
-                        <TpvScreen />
-                      </Screen>
-                      <div className="absolute bottom-0 right-[-2%] w-[22%]">
-                        <Phone>
-                          <ComanderoScreen />
-                        </Phone>
-                      </div>
-                    </div>
-                  )}
-                  {p.icon === "building" && (
-                    <Screen>
-                      <ErpScreen />
-                    </Screen>
-                  )}
-                  {p.icon === "activity" && (
-                    <div className="relative pb-[32%]">
-                      <Screen width={720} height={300}>
-                        <ElkPipelineScreen compact />
-                      </Screen>
-                      <div className="absolute bottom-0 right-[-3%] w-[58%]">
-                        <Screen width={720} height={450}>
-                          <SeleniumScreen />
-                        </Screen>
-                      </div>
-                    </div>
-                  )}
-                  {p.games && (
-                    <div className="grid grid-cols-2 gap-3">
-                      {p.games.map((g) => (
-                        <GameCard key={g.title} game={g} />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </Tile>
+  return (
+    <section id="proyectos" className="scroll-mt-20 bg-mist px-3 py-20 md:px-5 md:py-28">
+      <Reveal className="mx-auto max-w-[980px] px-2 text-center">
+        <h2 className="font-display text-[clamp(2.5rem,6vw,4rem)] font-semibold tracking-[-0.035em]">
+          Proyectos.
+        </h2>
+        <p className="mx-auto mt-3 max-w-[620px] text-pretty text-[19px] leading-[1.45] text-ink-2 md:text-[21px]">
+          La mayoría son proyectos de empresa, así que su código no es público. Esto es lo que hacen y
+          con qué están construidos.
+        </p>
+      </Reveal>
+
+      <div className="mx-auto mt-12 max-w-[1240px] space-y-16 md:mt-16 md:space-y-24">
+        {grupos.map((g) => (
+          <div key={g.id}>
+            <Reveal className="mb-6 px-2 text-center md:mb-8">
+              <h3 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.03em]">{g.titulo}</h3>
+              <p className="mt-1.5 text-[17px] text-ink-2 md:text-[19px]">{g.texto}</p>
             </Reveal>
-          ))}
-        </div>
+            <div className="grid gap-3">
+              {grandes[g.id]}
+              {g.pequenos.length > 0 && (
+                <div className="grid gap-3 md:grid-cols-2">
+                  {g.pequenos.map((p, i) => (
+                    <Reveal
+                      key={p.title}
+                      delay={i * 0.08}
+                      className={`h-full ${g.pequenos.length % 2 === 1 && i === g.pequenos.length - 1 ? "md:col-span-2" : ""}`}
+                    >
+                      <Tile project={p} onOpen={(e) => show(p, e.currentTarget)} compact>
+                        <div className={`mt-8 px-6 ${g.pequenos.length % 2 === 1 && i === g.pequenos.length - 1 ? "mx-auto w-full max-w-[640px]" : ""}`}>
+                          {p.icon === "store" && (
+                            <div className="relative pb-[8%]">
+                              <Screen>
+                                <TpvScreen />
+                              </Screen>
+                              <div className="absolute bottom-0 right-[-2%] w-[22%]">
+                                <Phone>
+                                  <ComanderoScreen />
+                                </Phone>
+                              </div>
+                            </div>
+                          )}
+                          {p.icon === "building" && (
+                            <Screen>
+                              <ErpScreen />
+                            </Screen>
+                          )}
+                          {p.icon === "activity" && (
+                            <div className="relative pb-[32%]">
+                              <Screen width={720} height={300}>
+                                <ElkPipelineScreen compact />
+                              </Screen>
+                              <div className="absolute bottom-0 right-[-3%] w-[58%]">
+                                <Screen width={720} height={450}>
+                                  <SeleniumScreen />
+                                </Screen>
+                              </div>
+                            </div>
+                          )}
+                          {p.games && (
+                            <div className="grid grid-cols-2 gap-3">
+                              {p.games.map((gm) => (
+                                <GameCard key={gm.title} game={gm} />
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </Tile>
+                    </Reveal>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
 
       <AnimatePresence>{open && <Modal project={open} onClose={close} />}</AnimatePresence>
@@ -246,15 +258,12 @@ function Tile({
   onOpen,
   dark,
   compact,
-  backdrop,
   children,
 }: {
   project: Project;
   onOpen: (e: React.MouseEvent<HTMLElement>) => void;
   dark?: boolean;
   compact?: boolean;
-  /* Decoración de fondo detrás del texto y la ilustración. */
-  backdrop?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -263,7 +272,6 @@ function Tile({
         dark ? "bg-night text-white" : "bg-paper"
       } ${compact ? "pb-8 pt-10" : "pb-0 pt-12 md:pt-14"}`}
     >
-      {backdrop}
       <div className="relative px-6">
         {p.badge && (
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e0442f]/15 px-3 py-1 text-[13px] font-semibold text-[#ff6b55]">
@@ -274,13 +282,13 @@ function Tile({
         <p className={`text-[14px] font-semibold ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>
           {p.kind} · {p.year}
         </p>
-        <h3
+        <h4
           className={`mt-1 font-display font-semibold tracking-[-0.03em] ${
             compact ? "text-[28px]" : "text-[clamp(2.25rem,5vw,3.5rem)]"
           }`}
         >
           {p.title}
-        </h3>
+        </h4>
         <p
           className={`mx-auto mt-2 max-w-[560px] text-pretty leading-[1.4] ${
             compact ? "text-[17px]" : "text-[19px] md:text-[21px]"

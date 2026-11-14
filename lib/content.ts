@@ -25,8 +25,12 @@ export type Game = {
   cover: string;
 };
 
+/* Cómo se agrupan en la sección de proyectos. */
+export type Category = "webapp" | "landing" | "otro";
+
 export type Project = {
   title: string;
+  category: Category;
   icon: IconName;
   tint: Tint;
   kind: string;
@@ -47,6 +51,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     title: "Tras la pantalla",
+    category: "webapp",
     icon: "dice",
     tint: "red",
     kind: "App para másteres de rol",
@@ -74,6 +79,7 @@ export const projects: Project[] = [
   },
   {
     title: "El hilo rojo",
+    category: "landing",
     icon: "camera",
     tint: "red",
     kind: "Web para un estudio de bodas",
@@ -94,6 +100,7 @@ export const projects: Project[] = [
   },
   {
     title: "La Caja Caballero",
+    category: "webapp",
     icon: "shop",
     tint: "orange",
     kind: "Tienda online · proyecto de fin de grado",
@@ -114,6 +121,7 @@ export const projects: Project[] = [
   },
   {
     title: "TPV y comandero",
+    category: "otro",
     icon: "store",
     tint: "green",
     kind: "Hostelería · escritorio y móvil",
@@ -130,6 +138,7 @@ export const projects: Project[] = [
   },
   {
     title: "ERP y servicios web",
+    category: "webapp",
     icon: "building",
     tint: "blue",
     kind: "Producto interno",
@@ -146,6 +155,7 @@ export const projects: Project[] = [
   },
   {
     title: "Monitorización con ELK",
+    category: "otro",
     icon: "activity",
     tint: "purple",
     kind: "Infraestructura",
@@ -162,6 +172,7 @@ export const projects: Project[] = [
   },
   {
     title: "Videojuegos",
+    category: "otro",
     icon: "gamepad",
     tint: "pink",
     kind: "Game jams",
