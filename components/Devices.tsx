@@ -519,3 +519,203 @@ export function HiloRojoMovilScreen() {
     </div>
   );
 }
+
+/* Tras la pantalla: la portada de la app (portátil) y el tablero con un hechizo (móvil), con sus colores reales. */
+const tlp = { fondo: "#0b0b0d", panel: "#101013", tarjeta: "#16161a", tarjeta2: "#1e1e23", borde: "#2a2a31", texto: "#f4f4f6", texto2: "#b8b8c1", texto3: "#82828c", acento: "#e5484d" };
+
+function TlpLogo({ size = 28 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 40 40" width={size} height={size} aria-hidden>
+      <rect width="40" height="40" rx="9" fill={tlp.acento} />
+      <g fill="none" stroke="#fff" strokeWidth="1.7" strokeLinejoin="round">
+        <path d="M20 7.5 30.8 13.7v12.6L20 32.5 9.2 26.3V13.7z" />
+        <path d="M20 7.5 14 22h12zM9.2 13.7 14 22l-4.8 4.3M30.8 13.7 26 22l4.8 4.3M14 22l6 10.5 6-10.5" opacity=".6" />
+      </g>
+    </svg>
+  );
+}
+
+export function TrasLaPantallaScreen() {
+  const grupos = [
+    ["En la partida", ["Combate", "Tienda", "PNJ", "Ambiente", "Tablero"]],
+    ["Para preparar", ["Cuaderno", "Mapas", "Manuales", "Criaturas"]],
+    ["Con tus jugadores", ["Campaña", "Mesa"]],
+  ] as const;
+  const estados = [
+    ["Combate", "Ronda 3", "Le toca a Kael", true],
+    ["Campaña", "La Corona de Ceniza", "2 jugadores · 1 aviso", false],
+    ["Cuaderno", "28 entradas", "7 PNJ · 6 lugares", false],
+    ["Ambiente", "Taberna", "Sonando ahora", false],
+  ] as const;
+  const cuaderno = [
+    ["PNJ", "Liesel Vesmar, «la Portadora»", "Lidera a los Hijos de la Brasa con una máscara de hierro.", "#e5484d"],
+    ["Lugar", "Minas de Pizarra Roja", "El culto ha reabierto las galerías de abajo.", "#3ecf8e"],
+    ["Pista", "El sello del barón en las cajas", "Prueba suficiente para la capitana Brena.", "#c9ccd4"],
+    ["Sesión", "Sesión 6 · Lo que el barón calla", "Confiesa a medias: su hija está viva.", "#82828c"],
+  ] as const;
+  const mesa = [
+    ["Ilvara Nocturna", "Exploradora · nivel 5", 16, 44],
+    ["Brokk Martillohondo", "Clérigo · nivel 5", 18, 48],
+    ["Kael Ardente", "Paladín · nivel 5", 18, 44],
+    ["Seraphine Vey", "Bruja · nivel 5", 13, 38],
+  ] as const;
+  return (
+    <div className="flex h-full text-left font-sans text-[12px]" style={{ background: tlp.fondo, color: tlp.texto }}>
+      <aside className="flex w-[180px] shrink-0 flex-col px-3 pt-4" style={{ background: tlp.panel, borderRight: `1px solid ${tlp.borde}` }}>
+        <div className="flex items-center gap-2 px-1">
+          <TlpLogo />
+          <span>
+            <span className="block text-[12px] font-bold leading-tight">Tras la pantalla</span>
+            <span className="block text-[10px]" style={{ color: tlp.texto3 }}>Kit del máster</span>
+          </span>
+        </div>
+        <div className="mt-4 flex items-center gap-1.5 rounded-[6px] px-2 py-1.5 text-[11px]" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}`, color: tlp.texto3 }}>
+          <Search className="size-3" /> Buscar…
+        </div>
+        {grupos.map(([g, items]) => (
+          <div key={g} className="mt-3">
+            <p className="px-2 pb-1 text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>{g}</p>
+            {items.map((i) => (
+              <p key={i} className="rounded-[6px] px-2 py-[5px] text-[12px]" style={i === "Tablero" ? { background: "rgba(229,72,77,0.14)", color: tlp.texto } : { color: tlp.texto2 }}>
+                {i}
+              </p>
+            ))}
+          </div>
+        ))}
+      </aside>
+      <div className="min-w-0 flex-1 space-y-3 p-5">
+        <div className="relative overflow-hidden rounded-[10px] p-5" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+          <div className="absolute -right-16 -top-20 size-[260px] rounded-full" style={{ background: "radial-gradient(circle, rgba(229,72,77,0.22), transparent 66%)" }} />
+          <svg viewBox="0 0 100 100" className="absolute -right-4 top-1/2 size-[150px] -translate-y-1/2" fill="none" stroke={tlp.acento} strokeOpacity="0.16" strokeWidth="1">
+            <path d="M50 4 90 27v46L50 96 10 73V27z" />
+            <path d="M50 4 29 60h42zM10 27l19 33-19 13M90 27 71 60l19 13M29 60l21 36 21-36" />
+          </svg>
+          <p className="relative text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>Viernes, 13 de noviembre</p>
+          <p className="relative mt-0.5 text-[24px] font-semibold tracking-[-0.02em]">Buenas tardes, Juan</p>
+          <p className="relative text-[12px]" style={{ color: tlp.texto2 }}>Campaña «La Corona de Ceniza»</p>
+          <div className="relative mt-3 w-[320px] rounded-[8px] px-3 py-2" style={{ background: "rgba(229,72,77,0.14)", border: "1px solid rgba(229,72,77,0.4)" }}>
+            <p className="text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.acento }}>Próxima sesión</p>
+            <p className="text-[12px]">Viernes a las 20:00. Traed los dados y la ficha.</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-4 gap-2.5">
+          {estados.map(([t, v, d, activo]) => (
+            <div key={t} className="relative overflow-hidden rounded-[10px] p-3" style={{ background: tlp.tarjeta, border: `1px solid ${activo ? "rgba(229,72,77,0.6)" : tlp.borde}` }}>
+              {activo && <span className="absolute inset-x-0 top-0 h-[2px]" style={{ background: tlp.acento }} />}
+              <p className="text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>{t}</p>
+              <p className="mt-1.5 flex items-center gap-1.5 truncate text-[14px] font-semibold">
+                {v}
+                {t === "Ambiente" && (
+                  <span className="flex h-3 items-end gap-[2px]">
+                    {[7, 11, 5].map((h, i) => (
+                      <span key={i} className="w-[3px] rounded-sm" style={{ height: h, background: tlp.acento }} />
+                    ))}
+                  </span>
+                )}
+              </p>
+              <p className="truncate text-[11px]" style={{ color: tlp.texto3 }}>{d}</p>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-[1.6fr_1fr] gap-2.5">
+          <div className="rounded-[10px] p-3.5" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+            <p className="mb-2 text-[13px] font-semibold">Lo último del cuaderno</p>
+            {cuaderno.map(([tipo, titulo, texto, color]) => (
+              <div key={titulo} className="flex items-center gap-2.5 py-[5px]" style={{ borderTop: `1px solid ${tlp.borde}` }}>
+                <span className="w-[52px] shrink-0 rounded-[4px] py-px text-center text-[10px] font-semibold" style={{ background: `${color}22`, color }}>{tipo}</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-[12px] font-medium">{titulo}</span>
+                  <span className="block truncate text-[10.5px]" style={{ color: tlp.texto3 }}>{texto}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-[10px] p-3.5" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+            <p className="mb-2 text-[13px] font-semibold">Tu mesa</p>
+            {mesa.map(([n, c, ca, pg]) => (
+              <div key={n} className="flex items-center gap-2 py-[5px]">
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[12px] font-medium">{n}</span>
+                  <span className="block truncate text-[10.5px]" style={{ color: tlp.texto3 }}>{c}</span>
+                </span>
+                <span className="rounded-[4px] px-1.5 text-[10px] font-semibold" style={{ background: tlp.tarjeta2, color: tlp.texto2 }}>CA {ca}</span>
+                <span className="rounded-[4px] px-1.5 text-[10px] font-semibold" style={{ background: tlp.tarjeta2, color: tlp.texto2 }}>PG {pg}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function TrasLaPantallaMovilScreen() {
+  const C = 30;
+  /* Una mazmorra pequeña: dos salas unidas por un pasillo. */
+  const suelo = [
+    [1, 2, 6, 6],
+    [7, 4, 3, 2],
+    [10, 1, 2, 9],
+    [3, 9, 8, 5],
+  ];
+  const fichas = [
+    { x: 3, y: 4, c: "#6aa8ff", t: "KA" },
+    { x: 4, y: 6, c: "#3ecf8e", t: "IN" },
+    { x: 10, y: 6, c: "#e5484d", t: "G1" },
+    { x: 11, y: 7, c: "#e5484d", t: "G2" },
+    { x: 6, y: 11, c: "#f2b45a", t: "BM" },
+  ];
+  const cx = 11;
+  const cy = 6.5;
+  const r = 2.6;
+  const dentro: [number, number][] = [];
+  for (let x = 0; x < 13; x++) for (let y = 0; y < 15; y++) if (Math.hypot(x + 0.5 - cx, y + 0.5 - cy) <= r) dentro.push([x, y]);
+  return (
+    <div className="flex h-full flex-col pt-12 text-left font-sans" style={{ background: tlp.fondo, color: tlp.texto }}>
+      <div className="flex items-center gap-2 px-4 pb-3">
+        <TlpLogo size={26} />
+        <span className="text-[16px] font-bold">Tablero</span>
+      </div>
+      <div className="mx-3 flex gap-1.5 rounded-t-[10px] p-2" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+        {["Mover", "Medir", "Hechizo", "Pintar"].map((h) => (
+          <span key={h} className="rounded-[6px] px-2.5 py-1.5 text-[11px] font-medium" style={h === "Hechizo" ? { background: tlp.acento, color: "#fff" } : { color: tlp.texto2 }}>
+            {h}
+          </span>
+        ))}
+      </div>
+      <div className="mx-3 overflow-hidden" style={{ borderLeft: `1px solid ${tlp.borde}`, borderRight: `1px solid ${tlp.borde}` }}>
+        <svg viewBox={`0 0 ${13 * C} ${15 * C}`} className="block w-full" aria-hidden>
+          <rect width={13 * C} height={15 * C} fill="#2a2630" />
+          {suelo.map(([x, y, w, h], i) => (
+            <rect key={i} x={x * C} y={y * C} width={w * C} height={h * C} fill="#c2b8a5" />
+          ))}
+          {dentro.map(([x, y]) => (
+            <rect key={`${x}-${y}`} x={x * C} y={y * C} width={C} height={C} fill="#ff6a3d" opacity={0.25} />
+          ))}
+          <path d={`${Array.from({ length: 14 }, (_, i) => `M${i * C} 0V${15 * C}`).join("")}${Array.from({ length: 16 }, (_, i) => `M0 ${i * C}H${13 * C}`).join("")}`} stroke="#000" strokeOpacity="0.16" />
+          <circle cx={cx * C} cy={cy * C} r={r * C} fill="#ff6a3d" fillOpacity="0.14" stroke="#ff6a3d" strokeWidth="2.5" />
+          <circle cx={cx * C} cy={cy * C} r="4.5" fill="#ff6a3d" />
+          <text x={cx * C - 74} y={cy * C - r * C - 8} fontSize="13" fontWeight="700" fill="#fff" stroke="#000" strokeWidth="3" strokeOpacity="0.7" paintOrder="stroke">
+            Bola de fuego
+          </text>
+          {fichas.map((f) => (
+            <g key={f.t} transform={`translate(${f.x * C + C / 2} ${f.y * C + C / 2})`}>
+              <circle r={C / 2 - 2} fill={f.c} stroke="#fff" strokeWidth="2" />
+              <text y="4.5" textAnchor="middle" fontSize="12" fontWeight="700" fill={f.c === "#f2b45a" || f.c === "#3ecf8e" ? "#141216" : "#fff"}>
+                {f.t}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </div>
+      <div className="mx-3 rounded-b-[10px] p-3.5" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+        <p className="text-[14px] font-semibold">Bola de fuego</p>
+        <p className="text-[11px]" style={{ color: tlp.texto3 }}>Esfera · 6 m de radio</p>
+        <div className="mt-2.5 rounded-[8px] px-3 py-2" style={{ background: tlp.tarjeta2 }}>
+          <p className="text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>Dentro del área (2)</p>
+          <p className="text-[13px]">Goblin 1, Goblin 2</p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -18,6 +18,8 @@ import {
   TiendaMovilScreen,
   TiendaScreen,
   TpvScreen,
+  TrasLaPantallaMovilScreen,
+  TrasLaPantallaScreen,
 } from "./Devices";
 import { Reveal, ease } from "./ui";
 
@@ -36,6 +38,7 @@ export function Projects() {
     opener.current?.focus();
   };
 
+  const tlp = byIcon("dice");
   const hilo = byIcon("camera");
   const tienda = byIcon("shop");
   /* El TPV va en pequeño: es de la empresa actual y no se muestran capturas reales. */
@@ -55,7 +58,22 @@ export function Projects() {
 
       <div className="mx-auto mt-12 grid max-w-[1240px] gap-3 md:mt-16">
         <Reveal>
-          <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)} dark>
+          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark>
+            <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
+              <Laptop>
+                <TrasLaPantallaScreen />
+              </Laptop>
+              <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
+                <Phone>
+                  <TrasLaPantallaMovilScreen />
+                </Phone>
+              </div>
+            </div>
+          </Tile>
+        </Reveal>
+
+        <Reveal>
+          <Tile project={hilo} onOpen={(e) => show(hilo, e.currentTarget)}>
             <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
               <Laptop>
                 <HiloRojoScreen />

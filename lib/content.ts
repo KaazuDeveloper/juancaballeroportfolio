@@ -15,7 +15,7 @@ export const profile = {
 };
 
 export type Tint = "blue" | "green" | "orange" | "red" | "purple" | "pink" | "indigo" | "teal";
-export type IconName = "phone" | "store" | "shop" | "building" | "activity" | "gamepad" | "camera";
+export type IconName = "phone" | "store" | "shop" | "building" | "activity" | "gamepad" | "camera" | "dice";
 
 export type Game = {
   title: string;
@@ -44,6 +44,27 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    title: "Tras la pantalla",
+    icon: "dice",
+    tint: "red",
+    kind: "App para másteres de rol",
+    year: "2026",
+    context: "Proyecto personal, para jugar con mi hermana y mi grupo",
+    summary:
+      "El kit del máster para partidas de Dungeons & Dragons: tiendas, personajes y mapas al momento, un tablero con hechizos, música que se compone sola y la campaña compartida con los jugadores.",
+    details: [
+      "Generadores de tiendas, PNJ y mapas (interiores, mazmorras, cuevas, campo y ciudad) dibujados en SVG.",
+      "Tablero con cuadrícula, fichas que se arrastran y áreas de conjuros que calculan a quién afectan.",
+      "Música y ambiente sintetizados en el navegador con Web Audio, sin un solo archivo de sonido, y efectos para cada acción.",
+      "Campañas en Firebase: cuentas de Google, cuaderno con relaciones, envíos al móvil de los jugadores y chat privado por enlace.",
+      "Escáner de fichas de personaje con la API de Gemini y visor de manuales en PDF con PDF.js.",
+      "Seis estilos de color, buscador global, visita guiada y diseño pensado primero para el móvil.",
+    ],
+    stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Firebase", "Web Audio", "Gemini"],
+    url: "https://tras-la-pantalla.vercel.app",
+    badge: "El más reciente",
+  },
+  {
     title: "El hilo rojo",
     icon: "camera",
     tint: "red",
@@ -62,7 +83,6 @@ export const projects: Project[] = [
     ],
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Cloudflare", "SVG"],
     url: "https://el-hilo-rojo.vercel.app",
-    badge: "El más reciente",
   },
   {
     title: "La Caja Caballero",
