@@ -40,6 +40,8 @@ export type Project = {
   repo?: string;
   /* Etiqueta destacada encima del título, por ejemplo "El más reciente". */
   badge?: string;
+  /* Cifras destacadas que se ven en la tarjeta. */
+  stats?: { value: string; label: string }[];
 };
 
 export const projects: Project[] = [
@@ -63,6 +65,12 @@ export const projects: Project[] = [
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Firebase", "Web Audio", "Gemini"],
     url: "https://tras-la-pantalla.vercel.app",
     badge: "El más reciente",
+    stats: [
+      { value: "330", label: "criaturas del SRD" },
+      { value: "12", label: "escenas de música" },
+      { value: "8", label: "tipos de mapa" },
+      { value: "16", label: "conjuros con área" },
+    ],
   },
   {
     title: "El hilo rojo",

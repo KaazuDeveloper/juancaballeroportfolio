@@ -535,6 +535,149 @@ function TlpLogo({ size = 28 }: { size?: number }) {
   );
 }
 
+/* Redondea para que el servidor y el navegador pinten exactamente lo mismo. */
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
+/* Banner propio de la portada de la app: un rey liche con corona y una llama arcana, dibujado en SVG. */
+function TlpBanner() {
+  const chispas = Array.from({ length: 30 }, (_, i) => [300 + ((i * 97) % 300), (i * 53) % 220, 0.6 + ((i * 7) % 5) / 4] as const);
+  const runas = Array.from({ length: 16 }, (_, i) => (i / 16) * Math.PI * 2);
+  return (
+    <svg viewBox="0 0 600 220" preserveAspectRatio="xMidYMin slice" className="absolute inset-0 h-full w-full" aria-hidden>
+      <defs>
+        <radialGradient id="tlp-fondo" cx="0.78" cy="0.35" r="0.75">
+          <stop offset="0" stopColor="#7a2a7e" />
+          <stop offset="0.35" stopColor="#3d1650" />
+          <stop offset="1" stopColor="#0e0818" />
+        </radialGradient>
+        <radialGradient id="tlp-luz" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0" stopColor="#ff7ae0" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#ff7ae0" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="tlp-oro" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#f3d27a" />
+          <stop offset="0.5" stopColor="#c99a3a" />
+          <stop offset="1" stopColor="#6e4c18" />
+        </linearGradient>
+        <linearGradient id="tlp-rostro" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#4a3a52" />
+          <stop offset="0.55" stopColor="#8a7890" />
+          <stop offset="1" stopColor="#3a2c44" />
+        </linearGradient>
+        <linearGradient id="tlp-rayo" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#ffb3f0" stopOpacity="0.35" />
+          <stop offset="1" stopColor="#ffb3f0" stopOpacity="0" />
+        </linearGradient>
+        <filter id="tlp-desenfoque" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="5" />
+        </filter>
+        <filter id="tlp-suave" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="1.6" />
+        </filter>
+        <filter id="tlp-nebulosa" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.022" numOctaves="4" seed="11" />
+          <feColorMatrix values="0 0 0 0 0.75  0 0 0 0 0.25  0 0 0 0 0.85  0 0 0 1.1 -0.45" />
+        </filter>
+      </defs>
+
+      {/* Cielo de nebulosa y rayos de luz */}
+      <rect width="600" height="220" fill="url(#tlp-fondo)" />
+      <rect width="600" height="220" filter="url(#tlp-nebulosa)" opacity="0.55" />
+      {[
+        "M420 0h30l-70 220h-40z",
+        "M480 0h18l10 220h-34z",
+        "M530 0h26l40 220h-30z",
+      ].map((d, i) => (
+        <path key={i} d={d} fill="url(#tlp-rayo)" />
+      ))}
+
+      {/* Almas que flotan alrededor */}
+      {[
+        [350, 70, 26, 10],
+        [385, 150, 20, 8],
+        [570, 120, 22, 9],
+        [330, 180, 30, 9],
+      ].map(([x, y, rx, ry], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={rx} ry={ry} fill="#f6c6ff" opacity="0.18" filter="url(#tlp-desenfoque)" />
+      ))}
+
+      {/* Círculo de runas detrás del liche */}
+      <g transform="translate(470 96)" fill="none" stroke="#ff7ae0" opacity="0.75">
+        <motion.g animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
+          <circle r="70" strokeWidth="1.2" strokeDasharray="2 5" />
+          <circle r="60" strokeWidth="0.8" />
+          {runas.map((a, i) => (
+            <path key={i} d={`M${r2(Math.cos(a) * 64)} ${r2(Math.sin(a) * 64)}l${r2(3 * Math.cos(a + 1))} ${r2(3 * Math.sin(a + 1))}l${r2(3 * Math.cos(a - 1))} ${r2(3 * Math.sin(a - 1))}`} strokeWidth="1.2" />
+          ))}
+        </motion.g>
+        <circle r="70" strokeWidth="6" opacity="0.18" filter="url(#tlp-desenfoque)" />
+      </g>
+
+      {/* Capa */}
+      <path d="M388 220c4-50 18-86 46-104l-6 104z" fill="#1c0f26" />
+      <path d="M552 220c-4-50-18-86-46-104l6 104z" fill="#1c0f26" />
+      <path d="M388 220c4-50 18-86 46-104" fill="none" stroke="#7a2a7e" strokeWidth="1.5" opacity="0.7" />
+      <path d="M552 220c-4-50-18-86-46-104" fill="none" stroke="#7a2a7e" strokeWidth="1.5" opacity="0.7" />
+
+      {/* Túnica y pecho */}
+      <path d="M428 220l6-96q36-20 72 0l8 96z" fill="#120a1a" />
+      <path d="M446 128q24 14 48 0l-6 60q-18 10-36 0z" fill="#241630" />
+      {[0, 1, 2, 3].map((i) => (
+        <path key={i} d={`M${452 + i * 0.5} ${138 + i * 11}q18 ${8 - i} 36 0`} fill="none" stroke="url(#tlp-oro)" strokeWidth="1.6" opacity="0.85" />
+      ))}
+      <path d="M470 120l9 11-9 14-9-14z" fill="#d62a4a" stroke="url(#tlp-oro)" strokeWidth="1.4" />
+      <circle cx="470" cy="131" r="10" fill="#ff3d5e" opacity="0.35" filter="url(#tlp-desenfoque)" />
+
+      <path d="M506 124l8 96" stroke="#ff7ae0" strokeOpacity="0.35" strokeWidth="2" />
+      <path d="M552 220c-4-50-18-86-46-104" fill="none" stroke="#ff7ae0" strokeOpacity="0.25" strokeWidth="2" />
+      {/* Hombreras con pinchos */}
+      <path d="M424 128q2-26 30-26l4 18q-20 0-26 18z" fill="#2a1a2e" stroke="url(#tlp-oro)" strokeWidth="1.6" />
+      <path d="M516 128q-2-26-30-26l-4 18q20 0 26 18z" fill="#2a1a2e" stroke="url(#tlp-oro)" strokeWidth="1.6" />
+      <path d="M426 118l-20-16 24 6zM432 108l-12-22 20 14zM514 118l20-16-24 6zM508 108l12-22-20 14z" fill="url(#tlp-oro)" />
+
+      {/* Brazo alzado con la llama arcana */}
+      {/* Manga ancha, guantelete de oro y dedos huesudos */}
+      <path d="M500 112q18-4 30-26l10-18 12 6-10 20q-12 26-38 36z" fill="#1a0f24" stroke="#ff7ae0" strokeOpacity="0.35" strokeWidth="1.2" />
+      <path d="M532 86l9-15 9 5-8 15z" fill="url(#tlp-oro)" stroke="#5a3e12" strokeWidth="0.6" />
+      <path d="M534 80l9 5M537 75l9 5" stroke="#5a3e12" strokeWidth="0.6" />
+      <path d="M542 70l-1-7M546 69l1-8M550 71l3-6M539 73l-4-4" stroke="#b9a7bd" strokeWidth="1.6" strokeLinecap="round" />
+      <motion.g animate={{ scale: [1, 1.12, 0.96, 1.08, 1], opacity: [0.9, 1, 0.85, 1, 0.9] }} transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }} style={{ transformOrigin: "548px 52px" }}>
+        <circle cx="548" cy="52" r="26" fill="url(#tlp-luz)" />
+        <path d="M548 30c8 10 12 18 6 28-2 4-8 6-12 2-6-6-4-14 6-30z" fill="#ff7ae0" filter="url(#tlp-suave)" />
+        <path d="M548 40c4 6 5 11 2 15-2 2-5 2-6 0-2-4-1-8 4-15z" fill="#fff0fb" />
+      </motion.g>
+
+      {/* Capucha, rostro y corona */}
+      <path d="M446 108q-4-38 24-50 28 12 24 50-12-10-24-10t-24 10z" fill="#0d0714" />
+      <path d="M458 76q0-16 12-18 12 2 12 18 0 18-12 26-12-8-12-26z" fill="url(#tlp-rostro)" />
+      <path d="M462 92q8 6 16 0M466 98h8" fill="none" stroke="#2a1d2e" strokeWidth="1.2" />
+      <path d="M460 84q3 6 6 6M480 84q-3 6-6 6" fill="none" stroke="#2a1d2e" strokeWidth="1" opacity="0.8" />
+      <path d="M492 104q-2-30-22-44" fill="none" stroke="#ff7ae0" strokeOpacity="0.3" strokeWidth="1.5" />
+      <path d="M470 80v10" stroke="#2a1d2e" strokeWidth="1" />
+      <motion.g animate={{ opacity: [0.75, 1, 0.75] }} transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}>
+        <circle cx="465" cy="80" r="5" fill="#ff4fd8" opacity="0.6" filter="url(#tlp-suave)" />
+        <circle cx="475" cy="80" r="5" fill="#ff4fd8" opacity="0.6" filter="url(#tlp-suave)" />
+        <circle cx="465" cy="80" r="1.8" fill="#ffd6f6" />
+        <circle cx="475" cy="80" r="1.8" fill="#ffd6f6" />
+      </motion.g>
+      <path d="M454 66l2-20 5 13 4-24 5 18 5-18 4 24 5-13 2 20q-16-6-32 0z" fill="url(#tlp-oro)" stroke="#5a3e12" strokeWidth="0.8" />
+      <path d="M454 66q16-6 32 0l-1 4q-15-5-30 0z" fill="#e8c56a" />
+
+      {/* Chispas y niebla del suelo */}
+      {chispas.map(([x, y, r], i) => (
+        <circle key={i} cx={x} cy={y} r={r} fill="#ffc2f2" opacity="0.6" />
+      ))}
+      {[
+        [380, 214, 90],
+        [480, 220, 110],
+        [580, 212, 80],
+      ].map(([x, y, rx], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={rx} ry="16" fill="#b05ad0" opacity="0.35" filter="url(#tlp-desenfoque)" />
+      ))}
+    </svg>
+  );
+}
+
 export function TrasLaPantallaScreen() {
   const grupos = [
     ["En la partida", ["Combate", "Tienda", "PNJ", "Ambiente", "Tablero"]],
@@ -584,12 +727,9 @@ export function TrasLaPantallaScreen() {
         ))}
       </aside>
       <div className="min-w-0 flex-1 space-y-3 p-5">
-        <div className="relative overflow-hidden rounded-[10px] p-5" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
-          <div className="absolute -right-16 -top-20 size-[260px] rounded-full" style={{ background: "radial-gradient(circle, rgba(229,72,77,0.22), transparent 66%)" }} />
-          <svg viewBox="0 0 100 100" className="absolute -right-4 top-1/2 size-[150px] -translate-y-1/2" fill="none" stroke={tlp.acento} strokeOpacity="0.16" strokeWidth="1">
-            <path d="M50 4 90 27v46L50 96 10 73V27z" />
-            <path d="M50 4 29 60h42zM10 27l19 33-19 13M90 27 71 60l19 13M29 60l21 36 21-36" />
-          </svg>
+        <div className="relative overflow-hidden rounded-[10px] p-5 pt-7" style={{ background: tlp.tarjeta, border: `1px solid ${tlp.borde}` }}>
+          <TlpBanner />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, #16161a 0%, rgba(22,22,26,0.82) 38%, rgba(22,22,26,0.15) 75%, transparent)" }} />
           <p className="relative text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>Viernes, 13 de noviembre</p>
           <p className="relative mt-0.5 text-[24px] font-semibold tracking-[-0.02em]">Buenas tardes, Juan</p>
           <p className="relative text-[12px]" style={{ color: tlp.texto2 }}>Campaña «La Corona de Ceniza»</p>
@@ -715,6 +855,125 @@ export function TrasLaPantallaMovilScreen() {
           <p className="text-[9px] font-semibold uppercase tracking-[0.06em]" style={{ color: tlp.texto3 }}>Dentro del área (2)</p>
           <p className="text-[13px]">Goblin 1, Goblin 2</p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* Fondo de la tarjeta de Tras la pantalla: mapa de mazmorra a trazo fino, dados que giran, brasas y brillo. */
+const brasas = Array.from({ length: 22 }, (_, i) => ({
+  x: (i * 47) % 100,
+  tam: 2 + ((i * 7) % 4),
+  dur: 6 + ((i * 13) % 7),
+  retraso: (i * 0.7) % 6,
+  deriva: ((i * 29) % 40) - 20,
+}));
+
+function D20({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" aria-hidden>
+      <path d="M50 4 90 27v46L50 96 10 73V27z" />
+      <path d="M50 4 29 60h42zM10 27l19 33-19 13M90 27 71 60l19 13M29 60l21 36 21-36" />
+    </svg>
+  );
+}
+
+export function TrasLaPantallaFondo() {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      {/* Brillo rojo detrás del título */}
+      <div className="absolute left-1/2 top-[-18%] h-[70%] w-[90%] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(229,72,77,0.32),transparent)]" />
+      {/* Mapa de mazmorra: salas, pasillos y una cuadrícula, muy tenue */}
+      <svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMin slice" className="absolute inset-x-0 top-0 h-[62%] w-full text-white opacity-[0.07]">
+        <defs>
+          <pattern id="tlp-rejilla" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M24 0H0V24" fill="none" stroke="currentColor" strokeWidth="0.6" />
+          </pattern>
+          <linearGradient id="tlp-funde" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#fff" />
+            <stop offset="1" stopColor="#fff" stopOpacity="0" />
+          </linearGradient>
+          <mask id="tlp-mascara">
+            <rect width="1200" height="520" fill="url(#tlp-funde)" />
+          </mask>
+        </defs>
+        <g mask="url(#tlp-mascara)" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect width="1200" height="520" fill="url(#tlp-rejilla)" stroke="none" />
+          <rect x="48" y="72" width="192" height="144" />
+          <rect x="336" y="24" width="120" height="96" />
+          <path d="M240 144H312V72H336" />
+          <circle cx="132" cy="360" r="72" />
+          <path d="M144 216V288" />
+          <path d="M312 120V312H456" />
+          <rect x="456" y="264" width="96" height="120" />
+          <rect x="744" y="48" width="168" height="120" />
+          <path d="M912 108H1008V240" />
+          <path d="M960 240h96l24 24v96l-24 24h-96l-24-24v-96z" />
+          <rect x="672" y="288" width="144" height="96" />
+          <path d="M816 336H936" />
+          <path d="M600 168H744M600 168V288H672" />
+          <rect x="1080" y="48" width="96" height="72" />
+          <path d="M1128 120V240" />
+          {[
+            [120, 132],
+            [396, 72],
+            [828, 108],
+            [1008, 312],
+          ].map(([x, y], i) => (
+            <text key={i} x={x} y={y + 6} fontSize="18" textAnchor="middle" fill="currentColor" stroke="none" fontWeight="700">
+              {i + 1}
+            </text>
+          ))}
+        </g>
+      </svg>
+      {/* Dados de veinte caras girando muy despacio */}
+      <motion.div className="absolute left-[-4%] top-[6%] w-[22%] max-w-[230px] text-[#e5484d] opacity-[0.16]" animate={{ rotate: 360 }} transition={{ duration: 90, repeat: Infinity, ease: "linear" }}>
+        <D20 className="w-full" />
+      </motion.div>
+      <motion.div className="absolute right-[-3%] top-[16%] w-[15%] max-w-[160px] text-white opacity-[0.08]" animate={{ rotate: -360 }} transition={{ duration: 120, repeat: Infinity, ease: "linear" }}>
+        <D20 className="w-full" />
+      </motion.div>
+      {/* Brasas que suben */}
+      {brasas.map((b, i) => (
+        <motion.span
+          key={i}
+          className="absolute bottom-[38%] rounded-full bg-[#ff8a4c]"
+          style={{ left: `${b.x}%`, width: b.tam, height: b.tam, boxShadow: "0 0 8px 2px rgba(255,120,60,0.55)" }}
+          initial={{ opacity: 0, y: 0, x: 0 }}
+          animate={{ opacity: [0, 0.9, 0], y: -320, x: b.deriva }}
+          transition={{ duration: b.dur, delay: b.retraso, repeat: Infinity, ease: "easeOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* Tarjetas pequeñas que flotan junto al portátil: una tirada crítica y la música sonando. */
+export function TrasLaPantallaTirada() {
+  return (
+    <div className="flex items-center gap-3 rounded-[14px] border border-white/10 bg-[#16161a]/95 px-4 py-3 text-left shadow-[0_20px_40px_-18px_rgba(0,0,0,0.8)] backdrop-blur">
+      <D20 className="size-9 shrink-0 text-[#e5484d]" />
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#82828c]">1d20 + 5</p>
+        <p className="text-[22px] font-semibold leading-none text-white">
+          25 <span className="ml-1 rounded-[4px] bg-[#3ecf8e]/15 px-1.5 py-0.5 align-middle text-[11px] text-[#3ecf8e]">¡crítico!</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export function TrasLaPantallaMusica() {
+  return (
+    <div className="flex items-center gap-3 rounded-[14px] border border-white/10 bg-[#16161a]/95 px-4 py-3 text-left shadow-[0_20px_40px_-18px_rgba(0,0,0,0.8)] backdrop-blur">
+      <span className="flex h-5 items-end gap-[3px]">
+        {[0, 1, 2].map((i) => (
+          <motion.span key={i} className="w-[4px] rounded-sm bg-[#e5484d]" animate={{ height: [6, 18, 9, 15, 6] }} transition={{ duration: 1.1 + i * 0.25, repeat: Infinity, ease: "easeInOut" }} />
+        ))}
+      </span>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#82828c]">Sonando</p>
+        <p className="text-[15px] font-semibold text-white">Taberna · laúd y gente</p>
       </div>
     </div>
   );

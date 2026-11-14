@@ -18,8 +18,11 @@ import {
   TiendaMovilScreen,
   TiendaScreen,
   TpvScreen,
+  TrasLaPantallaFondo,
   TrasLaPantallaMovilScreen,
+  TrasLaPantallaMusica,
   TrasLaPantallaScreen,
+  TrasLaPantallaTirada,
 } from "./Devices";
 import { Reveal, ease } from "./ui";
 
@@ -58,11 +61,25 @@ export function Projects() {
 
       <div className="mx-auto mt-12 grid max-w-[1240px] gap-3 md:mt-16">
         <Reveal>
-          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark>
+          <Tile project={tlp} onOpen={(e) => show(tlp, e.currentTarget)} dark backdrop={<TrasLaPantallaFondo />}>
             <div className="relative mx-auto mt-10 w-[94%] max-w-[760px]">
               <Laptop>
                 <TrasLaPantallaScreen />
               </Laptop>
+              <motion.div
+                className="absolute left-[-9%] top-[18%] hidden w-[230px] md:block"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <TrasLaPantallaTirada />
+              </motion.div>
+              <motion.div
+                className="absolute bottom-[14%] left-[-10%] hidden w-[250px] md:block"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <TrasLaPantallaMusica />
+              </motion.div>
               <div className="absolute bottom-[-2%] right-[-3%] w-[24%] md:right-[-6%] md:w-[21%]">
                 <Phone>
                   <TrasLaPantallaMovilScreen />
@@ -229,21 +246,25 @@ function Tile({
   onOpen,
   dark,
   compact,
+  backdrop,
   children,
 }: {
   project: Project;
   onOpen: (e: React.MouseEvent<HTMLElement>) => void;
   dark?: boolean;
   compact?: boolean;
+  /* Decoración de fondo detrás del texto y la ilustración. */
+  backdrop?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <article
-      className={`flex h-full flex-col overflow-hidden rounded-[28px] text-center ${
+      className={`relative isolate flex h-full flex-col overflow-hidden rounded-[28px] text-center ${
         dark ? "bg-night text-white" : "bg-paper"
       } ${compact ? "pb-8 pt-10" : "pb-0 pt-12 md:pt-14"}`}
     >
-      <div className="px-6">
+      {backdrop}
+      <div className="relative px-6">
         {p.badge && (
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e0442f]/15 px-3 py-1 text-[13px] font-semibold text-[#ff6b55]">
             <span className="size-1.5 rounded-full bg-[#ff6b55]" />
@@ -301,8 +322,18 @@ function Tile({
             </a>
           )}
         </div>
+        {p.stats && (
+          <dl className="mx-auto mt-8 grid max-w-[660px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
+            {p.stats.map((st) => (
+              <div key={st.label} className="flex flex-col-reverse">
+                <dt className={`mt-1 text-[13px] leading-[1.3] ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>{st.label}</dt>
+                <dd className="font-display text-[clamp(1.9rem,4vw,2.5rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
       </div>
-      <div className={compact ? "mt-auto" : ""}>{children}</div>
+      <div className={`relative ${compact ? "mt-auto" : ""}`}>{children}</div>
     </article>
   );
 }
