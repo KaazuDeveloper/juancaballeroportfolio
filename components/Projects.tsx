@@ -157,7 +157,7 @@ export function Projects() {
 /* Portátil con un móvil encima, a un lado. */
 function Dispositivos({ children, movil, movilDerecha }: { children: ReactNode; movil: ReactNode; movilDerecha?: boolean }) {
   return (
-    <div className="relative mx-auto mt-8 w-[86%] max-w-[640px]">
+    <div className="relative mx-auto mt-7 w-[86%] max-w-[500px]">
       <Laptop>{children}</Laptop>
       <div className={`absolute bottom-[-2%] w-[24%] md:w-[21%] ${movilDerecha ? "right-[-3%] md:right-[-6%]" : "left-[-3%] md:left-[-6%]"}`}>
         <Phone>{movil}</Phone>
@@ -321,7 +321,7 @@ function Tile({
     <article
       className={`relative isolate flex h-full flex-col overflow-hidden rounded-[28px] text-center ${
         dark ? "bg-night text-white" : "bg-paper"
-      } ${compact ? "pb-8 pt-10" : "pb-0 pt-10 md:pt-12"}`}
+      } ${compact ? "pb-8 pt-10" : "pb-0 pt-9 md:pt-10"}`}
     >
       <div className="relative px-6">
         {p.badge && (
@@ -334,14 +334,14 @@ function Tile({
           {p.kind} · {p.year}
         </p>
         <h4
-          className={`mt-1 font-display font-semibold tracking-[-0.03em] ${
+          className={`mt-1 font-display font-semibold leading-[1.1] tracking-[-0.03em] ${
             compact ? "text-[28px]" : "text-[clamp(2rem,4vw,2.875rem)]"
           }`}
         >
           {p.title}
         </h4>
         <p
-          className={`mx-auto mt-2 max-w-[520px] text-pretty leading-[1.4] ${
+          className={`mx-auto mt-2 max-w-[680px] text-pretty leading-[1.4] ${
             compact ? "text-[17px]" : "text-[17px] md:text-[19px]"
           } ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}
         >
@@ -382,11 +382,11 @@ function Tile({
           )}
         </div>
         {p.stats && (
-          <dl className="mx-auto mt-7 grid max-w-[600px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
+          <dl className="mx-auto mt-6 grid max-w-[600px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
             {p.stats.map((st) => (
               <div key={st.label} className="flex flex-col-reverse justify-end">
                 <dt className={`mt-1 text-[13px] leading-[1.3] ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>{st.label}</dt>
-                <dd className="font-display text-[clamp(1.6rem,3vw,2.125rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
+                <dd className="font-display text-[clamp(1.5rem,2.6vw,1.875rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
               </div>
             ))}
           </dl>
