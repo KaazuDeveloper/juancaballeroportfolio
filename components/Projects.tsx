@@ -323,7 +323,8 @@ function Tile({
         dark ? "bg-night text-white" : "bg-paper"
       } ${compact ? "pb-8 pt-10" : "pb-0 pt-9 md:pt-10"}`}
     >
-      <div className="relative px-6">
+      {/* Si sobra alto, el hueco se reparte arriba y abajo del texto en vez de quedar todo encima del dibujo. */}
+      <div className={`relative px-6 ${compact ? "" : "mt-auto"}`}>
         {p.badge && (
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e0442f]/15 px-3 py-1 text-[13px] font-semibold text-[#ff6b55]">
             <span className="size-1.5 rounded-full bg-[#ff6b55]" />
@@ -391,8 +392,22 @@ function Tile({
             ))}
           </dl>
         )}
+        {/* Sin cifras, enseña con qué está hecho, para que todas las tarjetas lleven la misma información. */}
+        {!p.stats && !compact && (
+          <ul className="mx-auto mt-6 flex max-w-[600px] flex-wrap justify-center gap-2" aria-label="Tecnologías">
+            {p.stack.map((t) => (
+              <li
+                key={t}
+                className={`rounded-full px-3 py-1 text-[13px] font-medium ${dark ? "bg-white/10 text-[#d2d2d7]" : "bg-[#f0f0f3] text-ink-2"}`}
+              >
+                {t}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-      <div className={`relative ${compact ? "mt-auto" : ""}`}>{children}</div>
+      {/* El dibujo siempre al pie de la tarjeta. */}
+      <div className="relative mt-auto">{children}</div>
     </article>
   );
 }
