@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Activity, ArrowUpRight, Building2, Camera, Check, ChevronLeft, ChevronRight, Dices, Gamepad2, ShoppingBag, Smartphone, Store, X } from "lucide-react";
-import { profile, projects, type Category, type Game, type Project } from "@/lib/content";
+import { profile, projects, type Game, type Project } from "@/lib/content";
 import {
   ComanderoScreen,
   DashboardScreen,
@@ -47,17 +47,9 @@ const TINTES: Record<Project["tint"], string> = {
   teal: "bg-[#0f9b9b]/10 text-[#0f9b9b]",
 };
 
-type Filtro = "todos" | Category;
-const FILTROS: { id: Filtro; nombre: string }[] = [
-  { id: "todos", nombre: "Todos" },
-  { id: "webapp", nombre: "Web apps" },
-  { id: "landing", nombre: "Landing pages" },
-];
-
 export function Projects() {
   const [open, setOpen] = useState<Project | null>(null);
   const opener = useRef<HTMLElement | null>(null);
-  const [filtro, setFiltro] = useState<Filtro>("todos");
 
   const show = (p: Project, el: HTMLElement) => {
     opener.current = el;
@@ -97,7 +89,6 @@ export function Projects() {
       ),
     },
   ];
-  const visibles = destacados.filter((d) => filtro === "todos" || d.project.category === filtro);
   /* Los de empresa, sin capturas reales, y los juegos van debajo en cuadrados. */
   const resto = projects.filter((p) => !destacados.some((d) => d.project === p));
 
@@ -113,31 +104,8 @@ export function Projects() {
         </p>
       </Reveal>
 
-      {/* Filtros */}
-      <Reveal className="mt-10 flex justify-center">
-        <div role="tablist" aria-label="Tipo de proyecto" className="inline-flex rounded-full bg-[#e8e8ed] p-1">
-          {FILTROS.map((f) => {
-            const n = f.id === "todos" ? destacados.length : destacados.filter((d) => d.project.category === f.id).length;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                role="tab"
-                aria-selected={filtro === f.id}
-                onClick={() => setFiltro(f.id)}
-                className={`rounded-full px-4 py-2 text-[15px] font-medium transition-colors md:px-5 ${
-                  filtro === f.id ? "bg-paper text-ink shadow-[0_1px_4px_rgba(0,0,0,0.12)]" : "text-ink-2 hover:text-ink"
-                }`}
-              >
-                {f.nombre} <span className="text-ink-3">{n}</span>
-              </button>
-            );
-          })}
-        </div>
-      </Reveal>
-
-      <Carrusel key={filtro}>
-        {visibles.map((d) => (
+      <Carrusel>
+        {destacados.map((d) => (
           <Tile key={d.project.title} project={d.project} onOpen={(e) => show(d.project, e.currentTarget)} dark={d.dark}>
             {d.escena}
           </Tile>
@@ -189,7 +157,7 @@ export function Projects() {
 /* Portátil con un móvil encima, a un lado. */
 function Dispositivos({ children, movil, movilDerecha }: { children: ReactNode; movil: ReactNode; movilDerecha?: boolean }) {
   return (
-    <div className="relative mx-auto mt-10 w-[90%] max-w-[760px]">
+    <div className="relative mx-auto mt-8 w-[86%] max-w-[620px]">
       <Laptop>{children}</Laptop>
       <div className={`absolute bottom-[-2%] w-[24%] md:w-[21%] ${movilDerecha ? "right-[-3%] md:right-[-6%]" : "left-[-3%] md:left-[-6%]"}`}>
         <Phone>{movil}</Phone>
@@ -233,14 +201,14 @@ function Carrusel({ children }: { children: ReactNode[] }) {
   };
 
   return (
-    <div className="-mx-3 mt-8 md:-mx-5">
+    <div className="-mx-3 mt-10 md:-mx-5 md:mt-12">
       <div
         ref={pista}
         onScroll={alDesplazar}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[6vw] pb-2 [scrollbar-width:none] md:px-[max(40px,calc((100vw-1120px)/2))] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[6vw] pb-2 [scrollbar-width:none] md:px-[max(40px,calc((100vw-920px)/2))] [&::-webkit-scrollbar]:hidden"
       >
         {children.map((hijo, i) => (
-          <div key={i} className="w-[88vw] max-w-[1120px] shrink-0 snap-center md:w-[min(1120px,84vw)]" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${total}`}>
+          <div key={i} className="w-[88vw] max-w-[920px] shrink-0 snap-center md:w-[min(920px,76vw)]" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${total}`}>
             {hijo}
           </div>
         ))}
@@ -353,7 +321,7 @@ function Tile({
     <article
       className={`relative isolate flex h-full flex-col overflow-hidden rounded-[28px] text-center ${
         dark ? "bg-night text-white" : "bg-paper"
-      } ${compact ? "pb-8 pt-10" : "pb-0 pt-12 md:pt-14"}`}
+      } ${compact ? "pb-8 pt-10" : "pb-0 pt-10 md:pt-12"}`}
     >
       <div className="relative px-6">
         {p.badge && (
@@ -367,14 +335,14 @@ function Tile({
         </p>
         <h4
           className={`mt-1 font-display font-semibold tracking-[-0.03em] ${
-            compact ? "text-[28px]" : "text-[clamp(2.25rem,5vw,3.5rem)]"
+            compact ? "text-[28px]" : "text-[clamp(2rem,4vw,2.875rem)]"
           }`}
         >
           {p.title}
         </h4>
         <p
-          className={`mx-auto mt-2 max-w-[560px] text-pretty leading-[1.4] ${
-            compact ? "text-[17px]" : "text-[19px] md:text-[21px]"
+          className={`mx-auto mt-2 max-w-[520px] text-pretty leading-[1.4] ${
+            compact ? "text-[17px]" : "text-[17px] md:text-[19px]"
           } ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}
         >
           {p.summary}
@@ -414,11 +382,11 @@ function Tile({
           )}
         </div>
         {p.stats && (
-          <dl className="mx-auto mt-8 grid max-w-[660px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
+          <dl className="mx-auto mt-7 grid max-w-[600px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
             {p.stats.map((st) => (
               <div key={st.label} className="flex flex-col-reverse">
                 <dt className={`mt-1 text-[13px] leading-[1.3] ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>{st.label}</dt>
-                <dd className="font-display text-[clamp(1.9rem,4vw,2.5rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
+                <dd className="font-display text-[clamp(1.6rem,3vw,2.125rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
               </div>
             ))}
           </dl>
