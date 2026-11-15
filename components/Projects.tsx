@@ -157,7 +157,7 @@ export function Projects() {
 /* Portátil con un móvil encima, a un lado. */
 function Dispositivos({ children, movil, movilDerecha }: { children: ReactNode; movil: ReactNode; movilDerecha?: boolean }) {
   return (
-    <div className="relative mx-auto mt-8 w-[86%] max-w-[620px]">
+    <div className="relative mx-auto mt-8 w-[86%] max-w-[660px] lg:mt-0 lg:w-[86%]">
       <Laptop>{children}</Laptop>
       <div className={`absolute bottom-[-2%] w-[24%] md:w-[21%] ${movilDerecha ? "right-[-3%] md:right-[-6%]" : "left-[-3%] md:left-[-6%]"}`}>
         <Phone>{movil}</Phone>
@@ -205,10 +205,10 @@ function Carrusel({ children }: { children: ReactNode[] }) {
       <div
         ref={pista}
         onScroll={alDesplazar}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[6vw] pb-2 [scrollbar-width:none] md:px-[max(40px,calc((100vw-920px)/2))] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[6vw] pb-2 [scrollbar-width:none] md:px-[max(40px,calc((100vw-1120px)/2))] [&::-webkit-scrollbar]:hidden"
       >
         {children.map((hijo, i) => (
-          <div key={i} className="w-[88vw] max-w-[920px] shrink-0 snap-center md:w-[min(920px,76vw)]" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${total}`}>
+          <div key={i} className="w-[88vw] max-w-[1120px] shrink-0 snap-center md:w-[min(1120px,84vw)]" aria-roledescription="diapositiva" aria-label={`${i + 1} de ${total}`}>
             {hijo}
           </div>
         ))}
@@ -319,11 +319,11 @@ function Tile({
 }) {
   return (
     <article
-      className={`relative isolate flex h-full flex-col overflow-hidden rounded-[28px] text-center ${
+      className={`relative isolate flex h-full flex-col overflow-hidden rounded-[28px] text-center lg:flex-row lg:items-center lg:text-left ${
         dark ? "bg-night text-white" : "bg-paper"
-      } ${compact ? "pb-8 pt-10" : "pb-0 pt-10 md:pt-12"}`}
+      } ${compact ? "pb-8 pt-10" : "pb-0 pt-10 md:pt-12 lg:py-12"}`}
     >
-      <div className="relative px-6">
+      <div className="relative px-6 lg:w-[42%] lg:shrink-0 lg:pl-14 lg:pr-2">
         {p.badge && (
           <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-[#e0442f]/15 px-3 py-1 text-[13px] font-semibold text-[#ff6b55]">
             <span className="size-1.5 rounded-full bg-[#ff6b55]" />
@@ -341,13 +341,13 @@ function Tile({
           {p.title}
         </h4>
         <p
-          className={`mx-auto mt-2 max-w-[520px] text-pretty leading-[1.4] ${
+          className={`mx-auto mt-2 max-w-[520px] text-pretty lg:mx-0 leading-[1.4] ${
             compact ? "text-[17px]" : "text-[17px] md:text-[19px]"
           } ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}
         >
           {p.summary}
         </p>
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-1 lg:justify-start">
           <button
             type="button"
             onClick={onOpen}
@@ -382,9 +382,9 @@ function Tile({
           )}
         </div>
         {p.stats && (
-          <dl className="mx-auto mt-7 grid max-w-[600px] grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
+          <dl className="mx-auto mt-7 grid max-w-[600px] lg:mx-0 grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4">
             {p.stats.map((st) => (
-              <div key={st.label} className="flex flex-col-reverse">
+              <div key={st.label} className="flex flex-col-reverse justify-end">
                 <dt className={`mt-1 text-[13px] leading-[1.3] ${dark ? "text-[#a1a1a6]" : "text-ink-2"}`}>{st.label}</dt>
                 <dd className="font-display text-[clamp(1.6rem,3vw,2.125rem)] font-semibold leading-none tracking-[-0.03em]">{st.value}</dd>
               </div>
@@ -392,7 +392,7 @@ function Tile({
           </dl>
         )}
       </div>
-      <div className={`relative ${compact ? "mt-auto" : ""}`}>{children}</div>
+      <div className={`relative ${compact ? "mt-auto" : "lg:flex-1 lg:pr-12"}`}>{children}</div>
     </article>
   );
 }
